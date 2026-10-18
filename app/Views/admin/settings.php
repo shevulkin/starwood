@@ -183,8 +183,8 @@
     <div class="field" style="margin-top:18px" data-help-title="Google Analytics 4"
          data-help="Ідентифікатор вимірювання з Google Analytics (Адміністратор → Потоки даних → ваш веб-потік). Має вигляд G-XXXXXXXXXX. Порожньо — аналітика вимкнена, жодних скриптів Google на сайті немає. Відвідування персоналу (адміністраторів і продавців) не враховується.">
       <label>Google Analytics 4: ідентифікатор вимірювання</label>
-      <input type="text" name="ga4_id" value="<?= e((string)Settings::get('ga4_id', '')) ?>" placeholder="G-XXXXXXXXXX" maxlength="20" autocomplete="off">
-      <p class="field-hint">Порожньо — аналітика вимкнена. Відвідування персоналу не рахується.</p>
+      <input type="text" name="ga4_id" value="<?= e((string)Settings::get('ga4_id', '')) ?>" placeholder="G-XXXXXXXXXX, GT-XXXXXXX" maxlength="80" autocomplete="off">
+      <p class="field-hint">Можна кілька через кому: G-… (Analytics) і GT-… (тег Google з Merchant Center). Порожньо — вимкнено. Відвідування персоналу не рахується.</p>
     </div>
   </div>
   <div class="admin-card" data-stab="seo">

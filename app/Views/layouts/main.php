@@ -32,7 +32,7 @@
 <?php /* Google Analytics 4: лише коли задано в налаштуваннях і відвідувач — не персонал, щоб власні кліки не псували статистику */
 if (($ga4 = Security::ga4Id()) !== '' && !Auth::isStaff()): ?>
 <script async src="https://www.googletagmanager.com/gtag/js?id=<?= e($ga4) ?>"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?= e($ga4) ?>');</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());<?php foreach (Security::googleTagIds() as $tid): ?>gtag('config','<?= e($tid) ?>');<?php endforeach; ?></script>
 <?php endif; ?>
 <?php
 echo JsonLd::tag(JsonLd::organization());

@@ -108,8 +108,17 @@ class Security
     /** Ідентифікатор GA4 із налаштувань (лише коректного вигляду), інакше порожній рядок */
     public static function ga4Id(): string
     {
-        $id = strtoupper(trim((string)\Settings::get('ga4_id', '')));
-        return preg_match('~^G-[A-Z0-9]{6,14}$~', $id) ? $id : '';
+        return self::googleTagIds()[0] ?? '';
+    }
+
+    /** Усі теги Google із налаштувань: G-… (Analytics), GT-… (тег Merchant Center / Ads), AW-…; через кому чи пробіл */
+    public static function googleTagIds(): array
+    {
+        $out = [];
+        foreach (preg_split('~[\s,;]+~', strtoupper(trim((string)\Settings::get('ga4_id', ''))), -1, PREG_SPLIT_NO_EMPTY) as $id) {
+            if (preg_match('~^(G|GT|AW)-[A-Z0-9]{6,14}$~', $id) && !in_array($id, $out, true)) $out[] = $id;
+        }
+        return $out;
     }
 
     private static function csp(): string

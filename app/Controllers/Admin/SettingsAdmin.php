@@ -152,8 +152,11 @@ class SettingsAdmin
             Settings::set('seo_noindex', isset($_POST['seo_noindex']) ? '1' : '0');
             // Google Analytics 4: лише ідентифікатор виду G-XXXXXXXXXX; усе інше відкидаємо,
             // бо він потрапляє в адресу скрипта на кожній сторінці
-            $ga4 = strtoupper(trim((string)($_POST['ga4_id'] ?? '')));
-            Settings::set('ga4_id', preg_match('~^G-[A-Z0-9]{6,14}$~', $ga4) ? $ga4 : '');
+            $tags = [];
+            foreach (preg_split('~[\s,;]+~', strtoupper(trim((string)($_POST['ga4_id'] ?? ''))), -1, PREG_SPLIT_NO_EMPTY) as $id) {
+                if (preg_match('~^(G|GT|AW)-[A-Z0-9]{6,14}$~', $id) && !in_array($id, $tags, true)) $tags[] = $id;
+            }
+            Settings::set('ga4_id', implode(',', $tags));
             /*
              * Торг. Головний вимикач і дві межі, які роблять із нього торг:
              * підлога осмисленої пропозиції й строк, доки діє домовлена ціна.
