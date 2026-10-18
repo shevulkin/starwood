@@ -308,7 +308,8 @@ class Shop
                 JsonLd::product(
                     $p, $allImages, $price,
                     array_map(fn($n) => ['@type' => 'Brand', 'name' => $n], Catalog::brandNames($p)),
-                    Catalog::stock((int)$p['id']) > 0 || !empty($p['made_to_order'])
+                    Catalog::stock((int)$p['id']) > 0 || !empty($p['made_to_order']),
+                    Reviews::forProduct((int)$p['id'])
                 ),
                 // Крихти повторюють шлях, яким людина сюди дійшла: головна →
                 // категорія → товар. Google показує їх замість голої адреси.

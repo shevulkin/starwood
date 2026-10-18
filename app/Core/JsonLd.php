@@ -223,26 +223,47 @@ class JsonLd
      * aggregateRating без жодного відгуку — саме та розмітка, за яку знімають
      * розширені результати вручну.
      */
-    public static function product(array $p, array $images, ?float $price, array $brands, bool $inStock): array
+    public static function product(array $p, array $images, ?float $price, array $brands, bool $inStock, array $reviews = []): array
     {
+        $rating = null; $revs = null;
+        if ($reviews) {
+            // Лише справжні схвалені відгуки саме про цей товар
+            $sum = array_sum(array_map(fn($r) => (int)$r['rating'], $reviews));
+            $rating = ['@type' => 'AggregateRating', 'ratingValue' => (string)round($sum / count($reviews), 1),
+                'reviewCount' => count($reviews), 'bestRating' => '5', 'worstRating' => '1'];
+            $revs = [];
+            foreach (array_slice($reviews, 0, 5) as $r) {
+                $revs[] = self::clean([
+                    '@type' => 'Review',
+                    'author' => ['@type' => 'Person', 'name' => (string)$r['author']],
+                    'datePublished' => date('Y-m-d', strtotime((string)$r['created_at']) ?: time()),
+                    'reviewRating' => ['@type' => 'Rating', 'ratingValue' => (string)(int)$r['rating'], 'bestRating' => '5', 'worstRating' => '1'],
+                    'reviewBody' => trim((string)($r['text'] ?? '')),
+                ]);
+            }
+        }
         return [
             '@context' => 'https://schema.org',
             '@type' => 'Product',
             'name' => $p['name'],
             'description' => ($p['short_desc'] ?? '') !== '' ? $p['short_desc'] : $p['name'],
             'sku' => $p['sku'] ?? '',
+            'mpn' => $p['sku'] ?? '',
             'gtin13' => (isset($p['barcode']) && strlen((string)$p['barcode']) === 13) ? $p['barcode'] : '',
             'weight' => !empty($p['weight']) ? [
                 '@type' => 'QuantitativeValue', 'value' => (float)$p['weight'], 'unitCode' => 'KGM',
             ] : null,
             'brand' => count($brands) === 1 ? $brands[0] : ($brands ?: null),
             'image' => array_map(fn($i) => asset_abs($i['path']), $images),
+            'aggregateRating' => $rating,
+            'review' => $revs,
             'offers' => self::clean([
                 '@type' => 'Offer',
                 'url' => abs_url('/product/' . $p['slug']),
                 'priceCurrency' => 'UAH',
                 'price' => $price !== null ? (string)$price : '',
                 // Рік уперед: ціни на сайті безстрокові, але поле обовʼязкове
+                'validFrom' => date('Y-m-d'),
                 'priceValidUntil' => date('Y-m-d', strtotime('+1 year')),
                 'availability' => $inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
                 'itemCondition' => 'https://schema.org/NewCondition',
@@ -283,6 +304,7 @@ class JsonLd
             'merchantReturnDays' => 14,
             'returnMethod' => 'https://schema.org/ReturnByMail',
             'returnFees' => 'https://schema.org/ReturnShippingFees',
+            'returnShippingFeesAmount' => ['@type' => 'MonetaryAmount', 'value' => 110, 'currency' => 'UAH'],
             'merchantReturnLink' => abs_url('/returns'),
         ];
     }
