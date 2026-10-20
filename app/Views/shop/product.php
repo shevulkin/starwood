@@ -9,6 +9,9 @@ $phone1 = Content::title('contact_phone');
       <a href="<?= e(url('/shop')) ?>">Каталог</a><span>/</span>
       <?php if ($cat): ?><a href="<?= e(shop_url($cat['slug'])) ?>"><?= e($cat['name']) ?></a><span>/</span><?php endif; ?>
       <span aria-current="page"><?= e($p['name']) ?></span>
+      <?php if (Auth::can('products.manage')): /* швидкий перехід до картки в адмінці — видно одразу в рядку крихт */ ?>
+      <a class="sv-crumbs-edit" href="<?= e(url('/admin/products/' . (int)$p['id'])) ?>">✎ Редагувати товар</a>
+      <?php endif; ?>
     </nav>
     <div class="product-page sv-pp" style="--tint:<?= e(Ages::tint($p)) ?>">
       <?php /* data-lightbox вмикає перегляд на весь екран; список фото модуль
@@ -587,3 +590,9 @@ $phone1 = Content::title('contact_phone');
     <?php endif; ?>
   </div>
 </section>
+<?php /* Лише персоналу з правом на товари: плаваюча кнопка переходу до картки. Покупцеві розмітка не віддається. */ ?>
+<?php if (Auth::can('products.manage')): ?>
+<a class="sv-edit-fab" href="<?= e(url('/admin/products/' . (int)$p['id'])) ?>">
+  <span aria-hidden="true">✎</span> Редагувати<?php if (!(int)$p['active']): ?> <small>вимкнено</small><?php endif; ?>
+</a>
+<?php endif; ?>
