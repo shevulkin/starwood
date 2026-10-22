@@ -181,27 +181,54 @@
     if (note && saved === '') note.textContent = 'Усі зміни збережено';
   });
 
-  // Картки форми товару згортаються кліком по заголовку: довга форма не змушує гортати те, що зараз не потрібно.
-  // Стан (яка картка згорнута) памʼятається в браузері; за замовчуванням усе розгорнуто, щоб нічого не загубилось.
+  // Картки форми товару згортаються кліком по заголовку. За замовчуванням розгорнута лише перша («Основне»): решта —
+  // згорнуті, щоб форма не була на п'ять екранів. Що ви розгорнули чи згорнули, браузер памʼятає.
   (function () {
     var form = document.getElementById('productForm');
     if (!form) return;
-    var KEY = 'sv_folded_cards', saved = {};
+    var KEY = 'sv_cards_state', saved = {};
     try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
-    Array.prototype.forEach.call(document.querySelectorAll('.admin-main .admin-card'), function (card) {
+    var cards = [];
+    Array.prototype.forEach.call(document.querySelectorAll('.admin-main .admin-card'), function (card, i) {
       var h = card.querySelector(':scope > h2');
       if (!h) return;
       var name = h.textContent.replace(/\s+/g, ' ').trim().slice(0, 60);
+      cards.push(card);
       card.classList.add('is-foldable');
-      if (saved[name]) card.classList.add('is-folded');
+      var folded = (name in saved) ? !!saved[name] : cards.length > 1;   // без вибору: перша відкрита, решта згорнуті
+      card.classList.toggle('is-folded', folded);
       h.addEventListener('click', function (e) {
         if (e.target.closest('a,button,input,select')) return;
         var on = card.classList.toggle('is-folded');
-        if (on) saved[name] = 1; else delete saved[name];
+        saved[name] = on ? 1 : 0;
         try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
       });
     });
+    // Кнопки «Розгорнути все / Згорнути все» біля заголовка сторінки
+    var acts = document.querySelector('.admin-head-acts') || document.querySelector('.admin-head');
+    if (acts && cards.length > 1) {
+      var mk = function (label, fold) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'btn btn-line btn-sm'; b.textContent = label;
+        b.addEventListener('click', function () {
+          cards.forEach(function (c, i) {
+            c.classList.toggle('is-folded', fold && i > 0);
+            var h = c.querySelector(':scope > h2');
+            if (h) saved[h.textContent.replace(/\s+/g, ' ').trim().slice(0, 60)] = (fold && i > 0) ? 1 : 0;
+          });
+          try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
+        });
+        acts.insertBefore(b, acts.firstChild);
+      };
+      mk('Згорнути все', true); mk('Розгорнути все', false);
+    }
+    // Збереження не має мовчки зупинятись на обовʼязковому полі в згорнутому блоці — розгортаємо його
+    form.addEventListener('invalid', function (e) {
+      var c = e.target.closest && e.target.closest('.admin-card.is-folded');
+      if (c) c.classList.remove('is-folded');
+    }, true);
   })();
+
   // Списки на телефоні: таблиця розкладається на стос карток.
   //
   // Вісім колонок на 390px давали горизонтальну прокрутку з nowrap: щоб
