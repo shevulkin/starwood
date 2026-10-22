@@ -33,7 +33,7 @@ $roEdit = $canEdit ? '' : 'disabled';
   </div>
 <?php endif; ?>
 
-<form method="post" action="<?= e(url($isNew ? '/admin/products/new' : '/admin/products/' . $p['id'])) ?>" id="productForm">
+<form method="post" action="<?= e(url($isNew ? '/admin/products/new' : '/admin/products/' . $p['id'])) ?>" id="productForm" autocomplete="off">
   <?= Csrf::field() ?>
   <?php /* Enter у будь-якому полі має зберігати товар, а не запускати генератор варіантів */ ?>
   <button type="submit" class="submit-default" tabindex="-1" aria-hidden="true"></button>
