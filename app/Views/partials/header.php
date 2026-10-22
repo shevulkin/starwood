@@ -83,8 +83,7 @@ $short = [
           </button>
           <div class="sv-acct-menu" data-acct-menu hidden>
             <div class="sv-acct-who"><?= e($auth_user['name']) ?></div>
-            <a href="<?= e(url('/orders')) ?>">Мої замовлення</a>
-            <a href="<?= e(url('/profile')) ?>">Профіль і налаштування</a>
+            <a href="<?= e(url('/profile')) ?>">Мій кабінет</a>
             <?php if (Auth::isStaff()): ?><a href="<?= e(url('/admin')) ?>">Адміністрування</a><?php endif; ?>
             <form method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?><button type="submit">Вийти</button></form>
           </div>
@@ -165,8 +164,7 @@ $short = [
     <?php endif; ?>
     <?php if ($auth_user): ?>
       <?php if (Auth::isStaff()): ?><a href="<?= e(url('/admin')) ?>">Адміністрування</a><?php endif; ?>
-      <a href="<?= e(url('/orders')) ?>">Мої замовлення</a>
-      <a href="<?= e(url('/profile')) ?>">Мій профіль</a>
+      <a href="<?= e(url('/profile')) ?>">Мій кабінет</a>
       <form method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?><button class="btn btn-line btn-sm" type="submit">Вийти</button></form>
     <?php endif; ?>
   </div>

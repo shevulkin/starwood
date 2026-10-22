@@ -10,7 +10,7 @@ $more = static fn(string $title, string $html): string =>
 <section class="section sv-compact" style="padding-top:32px">
   <div class="container narrow">
     <div class="kicker">Кабінет</div>
-    <h2>Мій профіль</h2>
+    <h2>Мій кабінет</h2>
     <?php if (empty($u['phone'])): ?>
       <div class="flash" style="padding:0;margin-top:16px"><div class="flash-error"><?= empty($u['email_verified_at'])
         ? 'Для користування сайтом потрібен номер телефону — вкажіть його нижче.'
@@ -52,7 +52,9 @@ $more = static fn(string $title, string $html): string =>
       <p style="margin-top:14px"><a class="btn btn-line" href="<?= e(url('/learning')) ?>">🎓 Моє навчання</a></p>
     <?php endif; ?>
 
-    <form class="admin-card" method="post" action="<?= e(url('/profile')) ?>" style="margin-top:22px">
+    <a class="sv-orders-link" href="<?= e(url('/orders')) ?>"><span>📦 Мої замовлення</span><span aria-hidden="true">→</span></a>
+
+    <form class="admin-card" method="post" action="<?= e(url('/profile')) ?>" style="margin-top:14px">
       <?= Csrf::field() ?>
       <div class="sv-row2">
       <div class="field"><label>Імʼя та прізвище</label><input type="text" name="name" value="<?= e($u['name']) ?>" required></div>

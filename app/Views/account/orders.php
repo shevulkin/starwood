@@ -1,6 +1,6 @@
 <section class="section" style="padding-top:48px">
   <div class="container narrow">
-    <div class="kicker">Кабінет</div>
+    <a class="sv-backlink" href="<?= e(url('/profile')) ?>">← Мій кабінет</a>
     <h2>Мої замовлення</h2>
     <?php if (!$orders): ?>
       <p class="muted" style="padding:36px 0">Замовлень поки немає. <a href="<?= e(url('/shop')) ?>">До магазину →</a></p>
