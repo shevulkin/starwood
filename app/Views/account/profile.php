@@ -9,7 +9,6 @@ $more = static fn(string $title, string $html): string =>
 ?>
 <section class="section sv-compact" style="padding-top:32px">
   <div class="container narrow">
-    <?= View::partial('partials/account_nav', ['active' => 'profile']) ?>
     <div class="kicker">Кабінет</div>
     <h2>Мій профіль</h2>
     <?php if (empty($u['phone'])): ?>
