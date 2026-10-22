@@ -37,6 +37,83 @@ $roEdit = $canEdit ? '' : 'disabled';
   </div>
 <?php endif; ?>
 
+<?php /* Фотографії — вгорі, одразу під назвою: це перше, що шукають у картці. Кожна дія з фото — окрема форма, тож блок стоїть поза основною формою. */ ?>
+<?php if (!$isNew && $canEdit): ?>
+<div class="admin-card" id="photos" style="margin-bottom:14px;scroll-margin-top:16px">
+  <h2 class="h-serif">Фотографії</h2>
+  <p class="dim" style="margin:0 0 14px">Перше спільне фото — головне: воно у каталозі, кошику та при поширенні в соцмережах.
+    Решта показуються мініатюрами на сторінці товару в цьому ж порядку.</p>
+  <?php if ($variants): ?>
+    <p class="dim" style="margin:-8px 0 14px">Кадр можна закріпити за варіантом — тоді на сторінці його побачить лише той,
+      хто обрав цей варіант, а спільні фото покажуться після нього. Головним закріплене фото не буває:
+      у каталозі товар представляє себе цілком.</p>
+  <?php endif; ?>
+  <div class="img-grid">
+    <?php
+    $last = count($images) - 1;
+    foreach ($images as $i => $img):
+      $imgVid = (int)($img['variant_id'] ?? 0);
+      $isMain = $img['path'] === ($p['image'] ?? '');
+    ?>
+      <div class="img-cell<?= $isMain ? ' is-main' : '' ?>">
+        <img src="<?= e(asset(Images::displayThumb($img['path']))) ?>" alt="">
+        <?php if ($isMain): ?><span class="img-badge">Головне</span><?php endif; ?>
+        <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>" class="img-del"><?= Csrf::field() ?>
+          <input type="hidden" name="_action" value="delete_image">
+          <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
+          <button class="btn btn-danger btn-xs" style="padding:3px 8px" title="Прибрати з товару" onclick="return confirm('Прибрати фото з товару?')">✕</button>
+        </form>
+        <div class="img-actions">
+          <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>"><?= Csrf::field() ?>
+            <input type="hidden" name="_action" value="move_image">
+            <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
+            <button class="btn btn-line btn-xs" name="dir" value="up" title="Раніше" <?= $i === 0 ? 'disabled' : '' ?>>←</button>
+            <button class="btn btn-line btn-xs" name="dir" value="down" title="Пізніше" <?= $i === $last ? 'disabled' : '' ?>>→</button>
+          </form>
+          <?php /* Закріплений кадр головним не робимо: у каталозі він обіцяв би
+                   один варіант замість товару. Спершу зніміть мітку. */ ?>
+          <?php if (!$isMain && !$imgVid): ?>
+            <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>"><?= Csrf::field() ?>
+              <input type="hidden" name="_action" value="main_image">
+              <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
+              <button class="btn btn-line btn-xs" title="Зробити головним">★ Головне</button>
+            </form>
+          <?php endif; ?>
+        </div>
+        <?php if ($variants): ?>
+          <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>" style="margin-top:6px"><?= Csrf::field() ?>
+            <input type="hidden" name="_action" value="image_variant">
+            <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
+            <select name="variant_id" onchange="this.form.submit()" style="width:100%"
+                    title="Кому належить кадр: усім варіантам чи одному">
+              <option value="0">спільне фото</option>
+              <?php foreach ($variants as $v): ?>
+                <option value="<?= (int)$v['id'] ?>"<?= $imgVid === (int)$v['id'] ? ' selected' : '' ?>>
+                  <?= e($v['name']) ?><?= (int)$v['active'] === 1 ? '' : ' (вимкнений)' ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </form>
+        <?php endif; ?>
+        <span class="dim"><?= (int)$img['width'] ?>×<?= (int)$img['height'] ?> · <?= round($img['bytes'] / 1024) ?> КБ</span>
+      </div>
+    <?php endforeach; ?>
+  </div>
+  <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <button class="btn btn-gold btn-sm" type="button" onclick="MediaPicker.open(function(path){
+      var f = document.getElementById('attachImageForm');
+      f.querySelector('[name=media_path]').value = path; f.submit();
+    })">📷 Додати фото (з сайту або з ПК)</button>
+    <span class="dim">Фото автоматично стискається і адаптується; розмір показано під мініатюрою</span>
+  </div>
+  <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>" id="attachImageForm" style="display:none">
+    <?= Csrf::field() ?>
+    <input type="hidden" name="_action" value="attach_image">
+    <input type="hidden" name="media_path" value="">
+  </form>
+</div>
+<?php endif; ?>
+
 <form method="post" action="<?= e(url($isNew ? '/admin/products/new' : '/admin/products/' . $p['id'])) ?>" id="productForm">
   <?= Csrf::field() ?>
   <?php /* Enter у будь-якому полі має зберігати товар, а не запускати генератор варіантів */ ?>
@@ -612,79 +689,6 @@ $roEdit = $canEdit ? '' : 'disabled';
 </form>
 
 <?php if (!$isNew && $canEdit): ?>
-<div class="admin-card" id="photos" style="margin-top:22px;scroll-margin-top:16px">
-  <h2 class="h-serif">Фотографії</h2>
-  <p class="dim" style="margin:0 0 14px">Перше спільне фото — головне: воно у каталозі, кошику та при поширенні в соцмережах.
-    Решта показуються мініатюрами на сторінці товару в цьому ж порядку.</p>
-  <?php if ($variants): ?>
-    <p class="dim" style="margin:-8px 0 14px">Кадр можна закріпити за варіантом — тоді на сторінці його побачить лише той,
-      хто обрав цей варіант, а спільні фото покажуться після нього. Головним закріплене фото не буває:
-      у каталозі товар представляє себе цілком.</p>
-  <?php endif; ?>
-  <div class="img-grid">
-    <?php
-    $last = count($images) - 1;
-    foreach ($images as $i => $img):
-      $imgVid = (int)($img['variant_id'] ?? 0);
-      $isMain = $img['path'] === ($p['image'] ?? '');
-    ?>
-      <div class="img-cell<?= $isMain ? ' is-main' : '' ?>">
-        <img src="<?= e(asset(Images::displayThumb($img['path']))) ?>" alt="">
-        <?php if ($isMain): ?><span class="img-badge">Головне</span><?php endif; ?>
-        <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>" class="img-del"><?= Csrf::field() ?>
-          <input type="hidden" name="_action" value="delete_image">
-          <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
-          <button class="btn btn-danger btn-xs" style="padding:3px 8px" title="Прибрати з товару" onclick="return confirm('Прибрати фото з товару?')">✕</button>
-        </form>
-        <div class="img-actions">
-          <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>"><?= Csrf::field() ?>
-            <input type="hidden" name="_action" value="move_image">
-            <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
-            <button class="btn btn-line btn-xs" name="dir" value="up" title="Раніше" <?= $i === 0 ? 'disabled' : '' ?>>←</button>
-            <button class="btn btn-line btn-xs" name="dir" value="down" title="Пізніше" <?= $i === $last ? 'disabled' : '' ?>>→</button>
-          </form>
-          <?php /* Закріплений кадр головним не робимо: у каталозі він обіцяв би
-                   один варіант замість товару. Спершу зніміть мітку. */ ?>
-          <?php if (!$isMain && !$imgVid): ?>
-            <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>"><?= Csrf::field() ?>
-              <input type="hidden" name="_action" value="main_image">
-              <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
-              <button class="btn btn-line btn-xs" title="Зробити головним">★ Головне</button>
-            </form>
-          <?php endif; ?>
-        </div>
-        <?php if ($variants): ?>
-          <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>" style="margin-top:6px"><?= Csrf::field() ?>
-            <input type="hidden" name="_action" value="image_variant">
-            <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
-            <select name="variant_id" onchange="this.form.submit()" style="width:100%"
-                    title="Кому належить кадр: усім варіантам чи одному">
-              <option value="0">спільне фото</option>
-              <?php foreach ($variants as $v): ?>
-                <option value="<?= (int)$v['id'] ?>"<?= $imgVid === (int)$v['id'] ? ' selected' : '' ?>>
-                  <?= e($v['name']) ?><?= (int)$v['active'] === 1 ? '' : ' (вимкнений)' ?>
-                </option>
-              <?php endforeach; ?>
-            </select>
-          </form>
-        <?php endif; ?>
-        <span class="dim"><?= (int)$img['width'] ?>×<?= (int)$img['height'] ?> · <?= round($img['bytes'] / 1024) ?> КБ</span>
-      </div>
-    <?php endforeach; ?>
-  </div>
-  <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <button class="btn btn-gold btn-sm" type="button" onclick="MediaPicker.open(function(path){
-      var f = document.getElementById('attachImageForm');
-      f.querySelector('[name=media_path]').value = path; f.submit();
-    })">📷 Додати фото (з сайту або з ПК)</button>
-    <span class="dim">Фото автоматично стискається і адаптується; розмір показано під мініатюрою</span>
-  </div>
-  <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>" id="attachImageForm" style="display:none">
-    <?= Csrf::field() ?>
-    <input type="hidden" name="_action" value="attach_image">
-    <input type="hidden" name="media_path" value="">
-  </form>
-</div>
 <?= View::partial('partials/media_picker') ?>
 
 <script>
