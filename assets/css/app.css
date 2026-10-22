@@ -2198,3 +2198,4 @@ textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
 .cat-thumb.is-auto img{opacity:.6}
 .cat-thumb-auto{position:absolute;right:3px;bottom:3px;background:rgba(0,0,0,.62);color:#fff;border-radius:6px;padding:1px 5px;font-size:10px;font-weight:600}
 .cat-thumb-add{padding:0 4px;text-align:center;line-height:1.1}
+.admin-head-acts{display:flex;gap:10px;flex-wrap:wrap;align-items:center}

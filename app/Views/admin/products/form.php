@@ -24,7 +24,10 @@ $roEdit = $canEdit ? '' : 'disabled';
     <?php endif; ?>
     <h1 class="h-serif"><?= $isNew ? 'Новий товар' : e($p['name']) ?></h1>
   </div>
-  <a class="btn btn-line btn-sm" href="<?= e(url('/admin/products')) ?>">← До списку</a>
+  <span class="admin-head-acts">
+    <?php if (!$isNew && !empty($p['slug'])): ?><a class="btn btn-gold btn-sm" href="<?= e(url('/product/' . $p['slug'])) ?>" target="_blank" rel="noopener">Сторінка товару на сайті ↗</a><?php endif; ?>
+    <a class="btn btn-line btn-sm" href="<?= e(url('/admin/products')) ?>">← До списку</a>
+  </span>
 </div>
 
 <?php if (!$canEdit): ?>
