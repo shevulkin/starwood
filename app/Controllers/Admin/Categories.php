@@ -131,7 +131,23 @@ class Categories
          * зі скількома товарами кожна справді працює. Тобто колонка не
          * economила навіть кліку, лише забирала місце.
          */
+        // Фото, яке плитка бере сама, коли власного немає: перший товар розділу (чи його підрозділів) із фото
+        $faceByCat = [];
+        foreach (DB::all("SELECT category_id, image FROM products WHERE active = 1 AND image IS NOT NULL AND image <> '' ORDER BY featured DESC, id DESC") as $r) {
+            $faceByCat[(int)$r['category_id']] ??= $r['image'];
+        }
+        $parentOf = [];
+        foreach ($cats as $c) $parentOf[(int)$c['id']] = (int)($c['parent_id'] ?? 0);
+        $autoFace = [];
+        foreach ($cats as $c) {
+            $id = (int)$c['id'];
+            $autoFace[$id] = $faceByCat[$id] ?? '';
+        }
+        foreach ($parentOf as $id => $pid) {
+            if ($pid && ($autoFace[$pid] ?? '') === '' && !empty($autoFace[$id])) $autoFace[$pid] = $autoFace[$id];
+        }
         View::show('admin/categories', [
+            'auto_face' => $autoFace,
             'cats' => self::treeOrder($cats),
             'page_title' => 'Категорії — Адміністрування',
         ], 'layouts/admin');

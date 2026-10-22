@@ -100,8 +100,17 @@ $roots = array_values(array_filter($cats, fn($c) => !($c['depth'] ?? 0)));
     ?>
       <tr data-cat-id="<?= (int)$c['id'] ?>" data-cat-parent="<?= (int)($c['parent_id'] ?? 0) ?>">
         <td><?php if ($sub): ?><span class="muted" style="margin-right:6px">└</span><?php endif; ?>
-          <input type="text" name="cat[<?= (int)$c['id'] ?>][name]" value="<?= e($c['name']) ?>"
-                 style="<?= $sub ? 'width:calc(100% - 20px)' : '' ?>"></td>
+          <?php /* Мініатюра: власне фото розділу, а без нього — те, що плитка бере сама (позначено «авто»). Клік відкриває вибір фото. */
+            $own = trim((string)($c['image'] ?? '')); $auto = (string)($auto_face[(int)$c['id']] ?? '');
+            $shown = $own !== '' ? $own : $auto; ?>
+          <div class="cat-namecell">
+            <button type="button" data-auto="<?= $auto !== '' ? e(asset(Images::displayThumb($auto))) : '' ?>" class="cat-thumb<?= $own === '' ? ' is-auto' : '' ?>" title="<?= $own !== '' ? 'Змінити фото розділу' : 'Власного фото немає — плитка бере фото товару. Натисніть, щоб задати своє' ?>">
+              <img src="<?= $shown !== '' ? e(asset(Images::displayThumb($shown))) : '' ?>" alt=""<?= $shown === '' ? ' hidden' : '' ?>>
+              <span class="cat-thumb-add"<?= $shown !== '' ? ' hidden' : '' ?>>＋ фото</span>
+              <small class="cat-thumb-auto"<?= $own !== '' || $shown === '' ? ' hidden' : '' ?>>авто</small>
+            </button>
+            <input type="text" name="cat[<?= (int)$c['id'] ?>][name]" value="<?= e($c['name']) ?>">
+          </div></td>
         <td>
           <?php if ($kids): ?>
             <span class="muted" title="У цьому розділі <?= $kids ?> підрозділ(и) — вкласти його в інший не можна">— верхній рівень</span>
@@ -173,14 +182,23 @@ $roots = array_values(array_filter($cats, fn($c) => !($c['depth'] ?? 0)));
   document.querySelectorAll('.cat-extra').forEach(function(box){
     var val = box.querySelector('.cat-img-val'), prev = box.querySelector('.cat-img-prev'),
         clear = box.querySelector('.cat-img-clear');
-    box.querySelector('.cat-img-pick').addEventListener('click', function(){
+    // рядок категорії — це тr безпосередньо перед рядком із цим блоком
+    var dataRow = box.closest('tr').previousElementSibling;
+    var thumb = dataRow && dataRow.querySelector('.cat-thumb');
+    var tImg = thumb && thumb.querySelector('img'), tAdd = thumb && thumb.querySelector('.cat-thumb-add'), tAuto = thumb && thumb.querySelector('.cat-thumb-auto');
+    var autoSrc = thumb ? (thumb.getAttribute('data-auto') || '') : '';
+    function pick(){
       MediaPicker.open(function(path){
         val.value = path; prev.src = base + '/assets/' + path; prev.style.display = ''; clear.hidden = false;
+        if (thumb) { tImg.src = base + '/assets/' + path; tImg.hidden = false; tAdd.hidden = true; tAuto.hidden = true; thumb.classList.remove('is-auto'); }
         val.dispatchEvent(new Event('input', {bubbles: true}));
       });
-    });
+    }
+    box.querySelector('.cat-img-pick').addEventListener('click', pick);
+    if (thumb) thumb.addEventListener('click', pick);
     clear.addEventListener('click', function(){
       val.value = ''; prev.style.display = 'none'; clear.hidden = true;
+      if (thumb) { thumb.classList.add('is-auto'); if (autoSrc) { tImg.src = autoSrc; tImg.hidden = false; tAuto.hidden = false; tAdd.hidden = true; } else { tImg.hidden = true; tAdd.hidden = false; tAuto.hidden = true; } }
       val.dispatchEvent(new Event('input', {bubbles: true}));
     });
   });
