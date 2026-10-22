@@ -26,7 +26,7 @@ $roEdit = $canEdit ? '' : 'disabled';
   </div>
   <span class="admin-head-acts">
     <?php if (!$isNew && !empty($p['slug'])): ?><a class="btn btn-gold btn-sm" href="<?= e(url('/product/' . $p['slug'])) ?>" target="_blank" rel="noopener">Сторінка товару на сайті ↗</a><?php endif; ?>
-    <a class="btn btn-line btn-sm" href="<?= e(url('/admin/products')) ?>">← До списку</a>
+    <a class="btn btn-line btn-sm" href="<?= e(url('/admin/products')) ?>">Каталог редагування товарів</a>
   </span>
 </div>
 
