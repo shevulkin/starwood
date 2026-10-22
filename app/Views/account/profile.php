@@ -99,7 +99,7 @@ $more = static fn(string $title, string $html): string =>
       <?= $more('Як це працює', 'Отримувача адреса не памʼятає навмисно: посилку видають лише тому, чиї імʼя й телефон у накладній, тож їх ви підтверджуєте в кожному замовленні.') ?>
 
       <?php if (!$addresses): ?>
-        <p class="dim">Поки що порожньо. Додайте першу — або поставте галку «Запамʼятати цю адресу» при оформленні.</p>
+        <p class="dim addr-empty">Поки що адрес немає. Додайте першу нижче — або поставте галку «Запамʼятати цю адресу» при оформленні.</p>
       <?php else: ?>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
           <?php foreach ($addresses as $a): ?>
@@ -138,6 +138,7 @@ $more = static fn(string $title, string $html): string =>
         </div>
       <?php endif; ?>
 
+      <div class="addr-formbox">
       <form method="post" action="<?= e(url('/profile')) ?>" id="addrForm">
         <?= Csrf::field() ?><input type="hidden" name="_action" value="address_save">
         <input type="hidden" name="id" id="addrId" value="">
@@ -146,7 +147,7 @@ $more = static fn(string $title, string $html): string =>
         <input type="hidden" name="np_office_ref" id="npOfficeRef" value="">
         <input type="hidden" name="np_street_ref" id="npStreetRef" value="">
         <input type="hidden" name="np_type" id="addrNpType" value="warehouse">
-        <h3 class="h-serif" style="font-size:17px;margin:0 0 12px" id="addrFormTitle">Нова адреса</h3>
+        <h3 class="h-serif addr-formtitle" id="addrFormTitle">Нова адреса</h3>
         <div class="variants" id="addrKind" style="margin-bottom:14px">
           <label class="chip active" data-kind="np">Нова Пошта</label>
           <label class="chip" data-kind="other">Інша доставка</label>
@@ -177,10 +178,13 @@ $more = static fn(string $title, string $html): string =>
         </div>
         <div class="field addr-other" style="display:none"><label>Адреса</label>
           <input type="text" name="address" id="addrAddress" placeholder="Місто, вулиця, будинок — як вам зручно отримати"></div>
-        <button class="btn btn-gold" type="submit">💾 Зберегти адресу</button>
-        <button class="btn btn-line" type="button" id="addrCancel" style="display:none">Скасувати</button>
-        <p class="dim" style="margin:12px 0 0">Збережено <?= count($addresses) ?> з <?= (int)$addr_limit ?>.</p>
+        <div class="addr-actions">
+          <button class="btn btn-gold" type="submit">💾 Зберегти адресу</button>
+          <button class="btn btn-line" type="button" id="addrCancel" style="display:none">Скасувати</button>
+          <span class="dim addr-count">Збережено <?= count($addresses) ?> з <?= (int)$addr_limit ?></span>
+        </div>
       </form>
+      </div>
     </div>
 
     <?php if ($notify_options): ?>
