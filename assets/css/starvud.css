@@ -1028,7 +1028,7 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 .sv-logout-row{margin:22px 0 6px;text-align:center}
 
 /* Кабінет: широка сторінка. Угорі — три останні замовлення (решта за «Показати ще»), нижче дві колонки: профіль і адреси | сповіщення, входи, месенджери */
-.container.narrow.sv-cab{max-width:1120px}
+.container.narrow.sv-cab{max-width:860px}
 .sv-myorders-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
 .sv-myorders-head h2{font-size:18px!important;margin:0!important}
 .sv-myorders-all{font-size:14px;font-weight:600;color:var(--teal-d);text-decoration:none;white-space:nowrap}
@@ -1043,3 +1043,12 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 .sv-cab-col{min-width:0}
 .sv-cab-col>.admin-card:first-child,.sv-cab-col>form.admin-card:first-child{margin-top:14px}
 @media (max-width:900px){.sv-cab-cols{grid-template-columns:minmax(0,1fr)}.sv-myorder{grid-template-columns:1fr auto}}
+
+/* Кабінет: вкладки замість довгого списку блоків — видно одну панель за раз */
+.sv-cab-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.sv-cab-tabs button{padding:9px 16px;border:0;background:none;border-radius:10px;font:inherit;font-size:15px;font-weight:600;color:var(--muted);cursor:pointer}
+.sv-cab-tabs button:hover{color:var(--text)}
+.sv-cab-tabs button.is-on{background:var(--teal-l);color:var(--teal-d)}
+.sv-tabpanel[hidden]{display:none}
+.sv-tabpanel>.admin-card:first-child,.sv-tabpanel>form.admin-card:first-child{margin-top:14px}
+@media (max-width:620px){.sv-cab-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.sv-cab-tabs button{white-space:nowrap;flex:none}}

@@ -52,6 +52,14 @@ $more = static fn(string $title, string $html): string =>
       <p style="margin-top:14px"><a class="btn btn-line" href="<?= e(url('/learning')) ?>">🎓 Моє навчання</a></p>
     <?php endif; ?>
 
+    <nav class="sv-cab-tabs" role="tablist" aria-label="Розділи кабінету">
+      <button type="button" role="tab" data-tab="orders" class="is-on">Замовлення</button>
+      <button type="button" role="tab" data-tab="profile">Профіль</button>
+      <button type="button" role="tab" data-tab="addr">Адреси</button>
+      <button type="button" role="tab" data-tab="notify">Сповіщення й входи</button>
+      <?php if (!empty($can_fiscal)): ?><button type="button" role="tab" data-tab="cash">Каса</button><?php endif; ?>
+    </nav>
+    <div class="sv-tabpanel" data-panel="orders">
     <div class="admin-card sv-myorders" style="margin-top:18px">
       <div class="sv-myorders-head">
         <h2 class="h-serif">📦 Мої замовлення</h2>
@@ -76,9 +84,9 @@ $more = static fn(string $title, string $html): string =>
       <?php endif; ?>
     </div>
 
-    <div class="sv-cab-cols">
-    <div class="sv-cab-col">
 
+    </div>
+    <div class="sv-tabpanel" data-panel="profile" hidden>
     <form class="admin-card" method="post" action="<?= e(url('/profile')) ?>" style="margin-top:14px">
       <?= Csrf::field() ?>
       <div class="sv-row2">
@@ -119,6 +127,8 @@ $more = static fn(string $title, string $html): string =>
       <button class="btn btn-gold" type="submit">💾 Зберегти</button>
     </form>
 
+    </div>
+    <div class="sv-tabpanel" data-panel="addr" hidden>
     <div class="admin-card">
       <h2 class="h-serif" style="font-size:20px">Адреси доставки</h2>
       <p class="dim" style="margin-bottom:8px">Збережена адреса підставляється при оформленні замовлення.</p>
@@ -214,7 +224,7 @@ $more = static fn(string $title, string $html): string =>
     </div>
 
     </div>
-    <div class="sv-cab-col">
+    <div class="sv-tabpanel" data-panel="notify" hidden>
     <?php if ($notify_options): ?>
       <form class="admin-card" method="post" action="<?= e(url('/profile')) ?>">
         <?= Csrf::field() ?><input type="hidden" name="_action" value="notify">
@@ -273,6 +283,45 @@ $more = static fn(string $title, string $html): string =>
       </form>
     <?php endif; ?>
 
+    <div class="admin-card" id="messengers" style="scroll-margin-top:16px">
+      <h2 class="h-serif" style="font-size:20px">Месенджери для сповіщень і входу</h2>
+      <p class="dim" style="margin-bottom:12px">Підключіть месенджер для кодів входу й сповіщень.</p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <b style="min-width:90px">Telegram</b>
+          <?php if (!empty($u['tg_chat_id'])): ?>
+            <span class="status-pill st-processing">✓ Підключено</span>
+          <?php elseif ($tg_ready): ?>
+            <button class="btn btn-line btn-sm" id="tgLinkBtn" type="button">Підключити Telegram</button>
+            <span class="dim" id="tgLinkHint"></span>
+          <?php else: ?>
+            <span class="dim">бот ще не налаштований адміністратором</span>
+          <?php endif; ?>
+          <?php if (!isset($notify_options['telegram'])): ?>
+            <span class="dim">— лише коди входу, сповіщення в Telegram вимкнені</span>
+          <?php endif; ?>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <b style="min-width:90px">Viber</b>
+          <?php if (!empty($u['viber_id'])): ?>
+            <span class="status-pill st-processing">✓ Підключено</span>
+          <?php elseif ($viber_ready && $viber_uri): ?>
+            <button class="btn btn-line btn-sm" id="viberLinkBtn" type="button">Підключити Viber</button>
+            <span class="dim" id="viberLinkHint"></span>
+          <?php else: ?>
+            <span class="dim">запрацює після публікації сайту на хостингу</span>
+          <?php endif; ?>
+          <?php /* месенджер підключений, але сповіщень туди не буде — кажемо це
+                    тут, інакше людина підключає його заради них і чекає марно */ ?>
+          <?php if (!isset($notify_options['viber'])): ?>
+            <span class="dim">— лише коди входу, сповіщення в Viber вимкнені</span>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <?php if (!empty($can_fiscal)): ?><div class="sv-tabpanel" data-panel="cash" hidden>
     <?php if ($can_fiscal): ?>
       <form class="admin-card" method="post" action="<?= e(url('/profile')) ?>">
         <?= Csrf::field() ?><input type="hidden" name="_action" value="kasa">
@@ -331,47 +380,8 @@ $more = static fn(string $title, string $html): string =>
       <?php endif; ?>
     <?php endif; ?>
 
-    <div class="admin-card" id="messengers" style="scroll-margin-top:16px">
-      <h2 class="h-serif" style="font-size:20px">Месенджери для сповіщень і входу</h2>
-      <p class="dim" style="margin-bottom:12px">Підключіть месенджер для кодів входу й сповіщень.</p>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-          <b style="min-width:90px">Telegram</b>
-          <?php if (!empty($u['tg_chat_id'])): ?>
-            <span class="status-pill st-processing">✓ Підключено</span>
-          <?php elseif ($tg_ready): ?>
-            <button class="btn btn-line btn-sm" id="tgLinkBtn" type="button">Підключити Telegram</button>
-            <span class="dim" id="tgLinkHint"></span>
-          <?php else: ?>
-            <span class="dim">бот ще не налаштований адміністратором</span>
-          <?php endif; ?>
-          <?php if (!isset($notify_options['telegram'])): ?>
-            <span class="dim">— лише коди входу, сповіщення в Telegram вимкнені</span>
-          <?php endif; ?>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-          <b style="min-width:90px">Viber</b>
-          <?php if (!empty($u['viber_id'])): ?>
-            <span class="status-pill st-processing">✓ Підключено</span>
-          <?php elseif ($viber_ready && $viber_uri): ?>
-            <button class="btn btn-line btn-sm" id="viberLinkBtn" type="button">Підключити Viber</button>
-            <span class="dim" id="viberLinkHint"></span>
-          <?php else: ?>
-            <span class="dim">запрацює після публікації сайту на хостингу</span>
-          <?php endif; ?>
-          <?php /* месенджер підключений, але сповіщень туди не буде — кажемо це
-                    тут, інакше людина підключає його заради них і чекає марно */ ?>
-          <?php if (!isset($notify_options['viber'])): ?>
-            <span class="dim">— лише коди входу, сповіщення в Viber вимкнені</span>
-          <?php endif; ?>
-        </div>
-      </div>
-    </div>
-
-    </div>
-    </div>
-
-    <form class="sv-logout-row" method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?>
+    </div><?php endif; ?>
+<form class="sv-logout-row" method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?>
       <button class="btn btn-line" type="submit">Вийти з акаунта</button>
     </form>
   </div>
@@ -489,4 +499,36 @@ document.addEventListener('click', function (e) {
   if (open) t.removeAttribute('hidden'); else t.setAttribute('hidden', '');
   b.setAttribute('aria-expanded', open ? 'true' : 'false');
 });
+</script>
+<script>
+/* Вкладки кабінету: показуємо одну панель; вибір памʼятається в адресі (#addr тощо), тож посилання на розділ працює.
+   Без скрипта всі панелі лишаються розгорнутими (hidden знімається атрибутом noscript-стилем не потрібен: JS знімає/ставить hidden). */
+(function () {
+  var tabs = document.querySelectorAll('.sv-cab-tabs [data-tab]'), panels = document.querySelectorAll('.sv-tabpanel');
+  if (!tabs.length) return;
+  function show(name) {
+    var ok = false;
+    panels.forEach(function (p) { var on = p.getAttribute('data-panel') === name; p.hidden = !on; if (on) ok = true; });
+    if (!ok) { name = 'orders'; panels.forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== 'orders'; }); }
+    tabs.forEach(function (b) { var on = b.getAttribute('data-tab') === name; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    return name;
+  }
+  tabs.forEach(function (b) { b.addEventListener('click', function () {
+    var n = show(b.getAttribute('data-tab'));
+    try { history.replaceState(null, '', '#' + n); } catch (e) {}
+  }); });
+  // старт: з адреси (#addr), а коли є помилка/повідомлення після збереження — залишаємось там, де були (адреса вже містить вкладку)
+  var h = (location.hash || '').replace('#', '');
+  if (h === 'messengers') h = 'notify';
+  // після збереження форми сторінка перезавантажується: повертаємо ту вкладку, з якої її надіслали
+  var next = ''; try { next = sessionStorage.getItem('sv_cab_next') || ''; sessionStorage.removeItem('sv_cab_next'); } catch (e) {}
+  show(h || next || 'orders');
+  panels.forEach(function (p) { p.addEventListener('submit', function () { try { sessionStorage.setItem('sv_cab_next', p.getAttribute('data-panel')); } catch (e) {} }); });
+  // посилання на #messengers (з підказки про Telegram) відкриває вкладку й прокручує до блока
+  if (location.hash === '#messengers') { var m = document.getElementById('messengers'); if (m) m.scrollIntoView(); }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#messengers"]'); if (!a) return;
+    show('notify'); var m = document.getElementById('messengers'); if (m) m.scrollIntoView({ behavior: 'smooth' });
+  });
+})();
 </script>
