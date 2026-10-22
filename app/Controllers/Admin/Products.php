@@ -875,9 +875,7 @@ class Products
             $v = trim(str_replace(',', '.', (string)($_POST[$k] ?? '')));
             return $v === '' ? null : max(0, (int)round((float)$v * 12));
         };
-        $min = $m('age_from'); $max = $m('age_to');
-        // «до 4 років» включно — це останній місяць четвертого року
-        if ($max !== null) $max = max($max + 11, (int)$min);
-        return ['age_min' => $min, 'age_max' => $max];
+        // Вказується лише «від» (як на упаковці): верхньої межі форма не має, тож age_max не заповнюємо
+        return ['age_min' => $m('age_from'), 'age_max' => null];
     }
 }

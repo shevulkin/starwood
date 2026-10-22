@@ -115,13 +115,9 @@ final class Ages
     public static function label(array $product): string
     {
         $min = $product['age_min'] ?? null;
-        $max = $product['age_max'] ?? null;
-        if ($min === null && $max === null) return '';
+        // Верхню межу не показуємо: вік вказується лише «від» (як на упаковці), а товар «від 3 років» підходить і старшим
+        if ($min === null) return '';
         $min = (int)$min;
-        if ($max !== null) {
-            // max зберігається як останній місяць проміжку (4 роки = 59 міс.)
-            return self::years($min) . '–' . self::yearsWord(intdiv((int)$max, 12));
-        }
         if ($min === 0) return '0+';
         if ($min < 12 || $min % 12 !== 0) return 'від ' . $min . ' міс.';
         return 'від ' . self::yearsWord(intdiv($min, 12), true);

@@ -304,17 +304,13 @@ $roEdit = $canEdit ? '' : 'disabled';
     </div>
     <?php $yr = static fn($mo) => $mo === null || $mo === '' ? '' : rtrim(rtrim(number_format((int)$mo / 12, 1, '.', ''), '0'), '.'); ?>
     <div class="field" style="max-width:360px" data-help-title="Вік дитини"
-         data-help="З якого віку іграшка розрахована — як на упаковці. За цим числом працює фільтр «За віком» на сайті й бейдж на картці.
+         data-help="З якого віку іграшка розрахована — як на упаковці («від 3 років»). За цим числом працює фільтр «За віком» на сайті й бейдж «від N років» на картці.
 
 Роки, можна з половинкою: 0 — з народження, 0.5 — від 6 місяців, 1.5 — від 18 місяців.
 
-«До» заповнюйте лише для іграшок з верхньою межею (напр. «від 2 до 4 років»). Порожнє «від» — товар не потрапить у жоден віковий фільтр.">
-      <label>Вік дитини, років</label>
-      <div style="display:flex;gap:10px;align-items:center">
-        <input type="text" inputmode="decimal" name="age_from" value="<?= e($yr($p['age_min'] ?? null)) ?>" placeholder="від" style="max-width:110px" <?= $roEdit ?>>
-        <span class="dim">—</span>
-        <input type="text" inputmode="decimal" name="age_to" value="<?= e(($p['age_max'] ?? null) === null ? '' : (string)intdiv((int)$p['age_max'], 12)) ?>" placeholder="до (не обовʼязково)" style="max-width:170px" <?= $roEdit ?>>
-      </div>
+Верхню межу вказувати не потрібно: іграшка «від 3 років» підходить і старшим. Порожнє поле — товар не потрапить у жоден віковий фільтр.">
+      <label>Вік від, років</label>
+      <input type="text" inputmode="decimal" name="age_from" value="<?= e($yr($p['age_min'] ?? null)) ?>" placeholder="наприклад 3 (0 — з народження)" style="max-width:260px" <?= $roEdit ?>>
     </div>
     <div class="field" style="max-width:360px" data-help-title="Поріг «закінчується»"
          data-help="З якої кількості показувати покупцю «закінчується» замість «в наявності».
