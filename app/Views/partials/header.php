@@ -122,8 +122,22 @@ $short = [
         <a href="<?= e(shop_url($c['slug'])) ?>"<?= $curCat === $c['slug'] ? ' aria-current="page"' : '' ?>><?= e($short[$c['slug']] ?? $c['name']) ?></a>
       <?php endforeach; ?>
       <?php if ($navMarkdown): ?><a class="sv-nav-markdown" href="<?= e(shop_url(null, ['markdown' => '1'])) ?>"><span class="md-full">Уцінені іграшки</span><span class="md-short">Уцінка</span></a><?php endif; ?>
+      <button type="button" class="sv-catbar-more" aria-expanded="false" aria-label="Показати всі розділи">▾</button>
     </div>
   </nav>
+  <script>
+  (function () {
+    var bar = document.querySelector('.sv-catbar'); if (!bar) return;
+    var inner = bar.querySelector('.sv-catbar-in'), more = bar.querySelector('.sv-catbar-more');
+    if (more) more.addEventListener('click', function () {
+      var on = bar.classList.toggle('is-open');
+      more.setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+    // поточний розділ — у видимій частині смуги, а не за краєм
+    var cur = inner.querySelector('a[aria-current]');
+    if (cur && inner.scrollWidth > inner.clientWidth) inner.scrollLeft = Math.max(0, cur.offsetLeft - 24);
+  })();
+  </script>
 
   <div class="mobile-menu sv-mobile" id="mobileMenu">
     <form class="nav-search sv-search" method="get" action="<?= e(url('/shop')) ?>" role="search">
