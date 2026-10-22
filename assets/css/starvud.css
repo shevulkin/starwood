@@ -968,3 +968,9 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 .sv-desc strong{font-weight:700}
 .sv-desc ol li::before{content:none}
 .sv-desc ol li{position:static}
+/* Смуга розділів на комп'ютері: в один рядок (з пунктом «Уцінені іграшки» вона не мала б вміщатися, тому відступи й шрифт трохи стискаються за шириною екрана; якщо все одно тісно — прокручується) */
+@media (min-width:1001px){
+  .sv-catbar-in{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .sv-catbar a{padding:8px clamp(7px,.75vw,13px);font-size:clamp(13px,1vw,14.5px)}
+  .sv-catbar a.sv-nav-markdown{margin-left:auto}
+}
