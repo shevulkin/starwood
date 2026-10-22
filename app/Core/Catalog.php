@@ -541,8 +541,22 @@ class Catalog
      * заради вітрини, сховало курсові категорії ще й у формі товару: обрати
      * категорію для курсу стало неможливо взагалі.
      */
+    /** Розділи в межах одного запиту не змінюються: шапка, меню, фільтри й картки питали б базу кілька разів поспіль */
+    private static ?array $categoriesMemo = null;
+
+    public static function forgetCategories(): void { self::$categoriesMemo = null; }
+
+    /** Кількість активних уцінених товарів (одне число на запит: показується в меню, шапці каталогу й фільтрах) */
+    public static function markdownCount(): int
+    {
+        static $n = null;
+        return $n ??= (int)DB::val('SELECT COUNT(*) FROM products WHERE active = 1 AND markdown = 1');
+    }
+
     public static function categories(): array
     {
+        // У CLI (тести, імпорт) таблиця змінюється посеред процесу — там кеш не тримаємо
+        if (PHP_SAPI !== 'cli' && self::$categoriesMemo !== null) return self::$categoriesMemo;
         $rows = DB::all('SELECT * FROM categories WHERE active = 1 ORDER BY sort, id');
         $byParent = [];
         $ids = array_map(fn($r) => (int)$r['id'], $rows);
@@ -559,7 +573,7 @@ class Catalog
                 $out[] = $kid;
             }
         }
-        return $out;
+        return self::$categoriesMemo = $out;
     }
 
     /**

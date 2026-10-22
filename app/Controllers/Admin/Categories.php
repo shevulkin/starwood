@@ -112,6 +112,7 @@ class Categories
                 if ($errors) flash('error', implode(' ', $errors));
                 else flash('success', 'Збережено');
             }
+            \Catalog::forgetCategories();
             redirect('/admin/categories');
         }
         $cats = DB::all('SELECT c.*, (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id) AS cnt

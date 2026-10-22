@@ -15,7 +15,7 @@
  */
 $navCats = Catalog::categoryTree();
 // Пункт «Уцінка» в меню — лише коли є що показати
-$navMarkdown = (int)DB::val('SELECT COUNT(*) FROM products WHERE active = 1 AND markdown = 1') > 0;
+$navMarkdown = Catalog::markdownCount() > 0;
 $phone1 = Content::title('contact_phone');
 $phone2 = Content::title('contact_phone2');
 $tel = static fn(string $p): string => preg_replace('~[^\d+]~', '', $p);

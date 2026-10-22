@@ -39,7 +39,7 @@ foreach (DB::all('SELECT category_id, COUNT(*) n FROM products WHERE active = 1 
     <div class="sv-shop-title">
       <h1><?= e($title) ?></h1>
       <span class="sv-count-head"><?= (int)$total ?> <?= plural((int)$total, 'товар', 'товари', 'товарів') ?></span>
-      <?php $mdAll = (int)DB::val('SELECT COUNT(*) FROM products WHERE active = 1 AND markdown = 1'); if ($mdAll > 0): ?>
+      <?php $mdAll = Catalog::markdownCount(); if ($mdAll > 0): ?>
         <a class="sv-tag sv-tag-markdown sv-md-link<?= $filters['markdown'] ? ' is-on' : '' ?>" href="<?= e(shop_url(null, $filters['markdown'] ? [] : ['markdown' => '1'])) ?>"><?= $filters['markdown'] ? 'Усі товари' : 'Уцінка · ' . $mdAll ?></a>
       <?php endif; ?>
     </div>
@@ -105,7 +105,7 @@ foreach (DB::all('SELECT category_id, COUNT(*) n FROM products WHERE active = 1 
         </fieldset>
 
         <label class="sv-check-line"><input type="checkbox" name="instock" value="1" <?= $filters['instock'] ? 'checked' : '' ?>> Лише в наявності</label>
-        <?php $mdCount = (int)DB::val('SELECT COUNT(*) FROM products WHERE active = 1 AND markdown = 1'); if ($mdCount > 0 || $filters['markdown']): ?>
+        <?php $mdCount = Catalog::markdownCount(); if ($mdCount > 0 || $filters['markdown']): ?>
           <label class="sv-check-line sv-check-markdown"><input type="checkbox" name="markdown" value="1" <?= $filters['markdown'] ? 'checked' : '' ?>> <span class="sv-tag sv-tag-markdown">Уцінка</span> <span class="dim"><?= $mdCount ?></span></label>
         <?php endif; ?>
 

@@ -303,14 +303,14 @@ class Shop
             // сприймає як переспам, тож у <title> її беремо лише коли вона вкладається в ~65 знаків
             'page_title' => (($t = trim((string)($p['seo_title'] ?? ''))) !== '' && mb_strlen($t) <= 65 ? $t : $p['name']) . ' — ' . cfg('app_name'),
             'meta_description' => self::productMetaDescription($p, $price),
-            'product_reviews' => Reviews::forProduct((int)$p['id']),
+            'product_reviews' => $prodReviews = Reviews::forProduct((int)$p['id']),
             'jsonld_product' => true,
             'jsonld' => [
                 JsonLd::product(
                     $p, $allImages, $price,
                     array_map(fn($n) => ['@type' => 'Brand', 'name' => $n], Catalog::brandNames($p)),
                     Catalog::stock((int)$p['id']) > 0 || !empty($p['made_to_order']),
-                    Reviews::forProduct((int)$p['id'])
+                    $prodReviews
                 ),
                 // Крихти повторюють шлях, яким людина сюди дійшла: головна →
                 // категорія → товар. Google показує їх замість голої адреси.
