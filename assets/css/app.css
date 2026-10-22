@@ -2130,3 +2130,15 @@ body.is-admin{background:#EEEBE3}
 .admin-main .btn-line{border-color:#B9B1A0;background:#fff}
 .admin-main .btn-line:hover{border-color:var(--teal);color:var(--teal-d)!important}
 @media (max-width:900px){.admin-main{padding:16px 12px}.admin-card{padding:18px 16px;border-radius:10px}}
+
+/* Полегшення малювання: великі розмиті тіні на високих блоках і поля з внутрішньою тінню
+   гальмували перемальовування форми товару (галки ставились із затримкою) */
+.admin-side{box-shadow:none}
+.admin-card{box-shadow:0 1px 2px rgba(35,40,41,.08)}
+.admin-save{box-shadow:none;border-top:2px solid var(--line2)}
+.admin-save.is-dirty{box-shadow:none;border-top-color:var(--teal)}
+.admin-main input[type=text],.admin-main input[type=url],.admin-main input[type=search],.admin-main input[type=number],
+.admin-main input[type=email],.admin-main input[type=tel],.admin-main input[type=date],.admin-main input[type=password],
+.admin-main select,.admin-main textarea{box-shadow:none;transition:none}
+.admin-main input:focus,.admin-main select:focus,.admin-main textarea:focus{box-shadow:none;border-color:var(--teal);outline:2px solid rgba(35,128,122,.25);outline-offset:0}
+.admin-main input[type=checkbox],.admin-main input[type=radio]{transition:none}
