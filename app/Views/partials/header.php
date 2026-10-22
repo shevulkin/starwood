@@ -76,18 +76,18 @@ $short = [
         <?php if (($myOffers = Offers::myTurnCount(Auth::id())) > 0): ?>
           <a class="sv-side-link" href="<?= e(url('/bargain')) ?>">Пропозиції · <?= (int)$myOffers ?></a>
         <?php endif; ?>
-        <div class="sv-acct" data-acct>
-          <button type="button" class="sv-icon" data-acct-btn aria-haspopup="true" aria-expanded="false" title="<?= e($auth_user['name']) ?>" aria-label="Мій кабінет">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
-            <span class="sv-icon-l">Кабінет</span>
+        <?php /* «Кабінет» — прямий перехід, а «Вийти» — окрема кнопка поруч: випадного списку з трьох рядків не потрібно
+                 («Адміністрування» для персоналу вже стоїть у шапці окремо) */ ?>
+        <a class="sv-icon" href="<?= e(url('/profile')) ?>" title="<?= e($auth_user['name']) ?>" aria-label="Мій кабінет">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+          <span class="sv-icon-l">Кабінет</span>
+        </a>
+        <form class="sv-logout" method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?>
+          <button type="submit" class="sv-icon" aria-label="Вийти" title="Вийти з акаунта">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+            <span class="sv-icon-l">Вийти</span>
           </button>
-          <div class="sv-acct-menu" data-acct-menu hidden>
-            <div class="sv-acct-who"><?= e($auth_user['name']) ?></div>
-            <a href="<?= e(url('/profile')) ?>">Мій кабінет</a>
-            <?php if (Auth::isStaff()): ?><a href="<?= e(url('/admin')) ?>">Адміністрування</a><?php endif; ?>
-            <form method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?><button type="submit">Вийти</button></form>
-          </div>
-        </div>
+        </form>
       <?php else: ?>
         <a class="sv-icon" href="#" id="loginBtn" aria-label="Увійти">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
