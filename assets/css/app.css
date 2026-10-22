@@ -2160,3 +2160,5 @@ body.is-admin{background:#EEEBE3}
 #attrRows .grid-row select,#attrRows .grid-row input[type=text]{padding:8px 10px;min-height:0;font-size:14px}
 #attrRows .row-del{padding:6px 10px}
 @media (max-width:1150px){#attrRows{grid-template-columns:minmax(0,1fr)}}
+/* Повний опис товару — великий, можна тягнути вниз */
+textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}

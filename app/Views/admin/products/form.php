@@ -177,7 +177,7 @@ $roEdit = $canEdit ? '' : 'disabled';
 Переноси рядків зберігаються, тож можна писати абзацами. Розмітка не підтримується — це звичайний текст.
 
 Технічні дані (вага, обʼєм, регіон) краще виносити в Характеристики нижче: за ними працюють фільтри в каталозі, а за текстом опису — ні.">
-      <label>Повний опис</label><textarea name="description" rows="5" <?= $roEdit ?>><?= e($p['description'] ?? '') ?></textarea></div>
+      <label>Повний опис</label><textarea name="description" id="fullDesc" rows="14" class="desc-big" <?= $roEdit ?>><?= e($p['description'] ?? '') ?></textarea></div>
     <div class="field" style="max-width:520px">
       <label>Причина уцінки (бачить покупець)</label>
       <input type="text" name="markdown_note" maxlength="160" value="<?= e($p['markdown_note'] ?? '') ?>" placeholder="Наприклад: пом’ята коробка, іграшка нова" <?= $roEdit ?>>
@@ -698,6 +698,17 @@ window.BOFU_PRODUCT_ATTRS = <?= json_js(array_map(fn($a) => [
     'value_id' => (int)$a['value_id'],
     'value' => $a['value'],
 ], array_values(array_filter($attrs, fn($a) => !empty($a['attribute_id']))))) ?>;
+</script>
+<script>
+(function () {
+  /* Повний опис — головний текст товару: показуємо його цілком, а не у вікні на 5 рядків (росте за змістом до 75% висоти екрана) */
+  var ta = document.getElementById('fullDesc');
+  if (!ta) return;
+  function fit() { ta.style.height = 'auto'; ta.style.height = Math.min(Math.max(ta.scrollHeight + 4, 320), window.innerHeight * 0.75) + 'px'; }
+  ta.addEventListener('input', fit);
+  window.addEventListener('load', fit);
+  fit();
+})();
 </script>
 <script src="<?= e(asset_v('js/product-form.js')) ?>" defer></script>
 <?php endif; ?>
