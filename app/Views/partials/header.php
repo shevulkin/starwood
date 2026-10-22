@@ -121,7 +121,7 @@ $short = [
       <?php foreach ($navCats as $c): ?>
         <a href="<?= e(shop_url($c['slug'])) ?>"<?= $curCat === $c['slug'] ? ' aria-current="page"' : '' ?>><?= e($short[$c['slug']] ?? $c['name']) ?></a>
       <?php endforeach; ?>
-      <?php if ($navMarkdown): ?><a class="sv-nav-markdown" href="<?= e(shop_url(null, ['markdown' => '1'])) ?>">Уцінка</a><?php endif; ?>
+      <?php if ($navMarkdown): ?><a class="sv-nav-markdown" href="<?= e(shop_url(null, ['markdown' => '1'])) ?>">Уцінені іграшки</a><?php endif; ?>
     </div>
   </nav>
 
@@ -140,7 +140,7 @@ $short = [
     <p class="sv-mobile-h">Розділи</p>
     <a href="<?= e(url('/shop')) ?>">Усі іграшки</a>
     <?php foreach ($navCats as $c): ?><a href="<?= e(shop_url($c['slug'])) ?>"><?= e($c['name']) ?></a><?php endforeach; ?>
-    <?php if ($navMarkdown): ?><a href="<?= e(shop_url(null, ['markdown' => '1'])) ?>">Уцінка</a><?php endif; ?>
+    <?php if ($navMarkdown): ?><a href="<?= e(shop_url(null, ['markdown' => '1'])) ?>">Уцінені іграшки</a><?php endif; ?>
     <p class="sv-mobile-h">Покупцям</p>
     <a href="<?= e(url('/delivery')) ?>">Доставка й оплата</a>
     <a href="<?= e(url('/testimonials')) ?>">Відгуки</a>
