@@ -457,6 +457,8 @@ class Products
                 'type' => Catalog::normType($_POST['type'] ?? null),
                 'active' => isset($_POST['active']) ? 1 : 0,
                 'featured' => isset($_POST['featured']) ? 1 : 0,
+                'markdown' => isset($_POST['markdown']) ? 1 : 0,
+                'markdown_note' => mb_substr(trim($_POST['markdown_note'] ?? ''), 0, 160) ?: null,
                 'made_to_order' => isset($_POST['made_to_order']) ? 1 : 0,
                 'low_stock_threshold' => ($_POST['low_stock_threshold'] ?? '') === '' ? null : (int)$_POST['low_stock_threshold'],
                 // Вік дитини: у формі роки (з кроком 0.5), у базі — місяці (див. Ages)
@@ -677,6 +679,8 @@ class Products
                 'type' => Catalog::normType($_POST['type'] ?? null, (string)$p['type']),
                 'active' => isset($_POST['active']) ? 1 : 0,
                 'featured' => isset($_POST['featured']) ? 1 : 0,
+                'markdown' => isset($_POST['markdown']) ? 1 : 0,
+                'markdown_note' => mb_substr(trim($_POST['markdown_note'] ?? ''), 0, 160) ?: null,
                 'made_to_order' => isset($_POST['made_to_order']) ? 1 : 0,
                 'low_stock_threshold' => ($_POST['low_stock_threshold'] ?? '') === '' ? null : (int)$_POST['low_stock_threshold'],
                 // Вік дитини: у формі роки (з кроком 0.5), у базі — місяці (див. Ages)

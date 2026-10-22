@@ -25,6 +25,7 @@ $photo = Catalog::photo($prod);
     <span class="sv-card-tags">
       <?php if ($old !== null): ?><span class="sv-tag sv-tag-sale">−<?= (int)round((1 - $pr / $old) * 100) ?>%</span>
       <?php elseif (!empty($prod['featured'])): ?><span class="sv-tag sv-tag-hit">Хіт</span><?php endif; ?>
+      <?php if (!empty($prod['markdown'])): ?><span class="sv-tag sv-tag-markdown">Уцінка</span><?php endif; ?>
       <?php if ($soldOut): ?><span class="sv-tag sv-tag-out">Очікується</span><?php endif; ?>
     </span>
     <?php /* Вік — значком на самому фото: рядок під ним не з'їдає висоту картки,

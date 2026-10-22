@@ -63,6 +63,9 @@ $phone1 = Content::title('contact_phone');
           <?php if ($ageLabel !== ''): ?><a class="sv-chip-age" href="<?= e(shop_url(null, ['age' => array_key_last(array_filter(Ages::BANDS, fn($b) => (int)$p['age_min'] >= $b[0]))])) ?>" style="background:<?= e(Ages::tint($p)) ?>">Вік: <?= e($ageLabel) ?></a><?php endif; ?>
           <?php if (!empty($p['sku'])): ?><span class="sv-chip-plain">Артикул: <?= e($p['sku']) ?></span><?php endif; ?>
         </div>
+        <?php if (!empty($p['markdown'])): ?>
+        <div class="sv-markdown"><span class="sv-tag sv-tag-markdown">Уцінка</span><?php if (trim((string)($p['markdown_note'] ?? '')) !== ''): ?> <span><?= e($p['markdown_note']) ?></span><?php endif; ?></div>
+        <?php endif; ?>
         <h1 class="sv-pp-title"><?= e($p['name']) ?></h1>
         <div class="sv-pp-status">
           <?php if ($stockNow > 0): ?><span class="sv-in"><i></i>В наявності</span>

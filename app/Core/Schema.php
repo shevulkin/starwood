@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 class Schema
 {
-    public const VERSION = 62;
+    public const VERSION = 63;
 
     /** Оновлення існуючої бази до поточної версії без втрати даних */
     public static function upgrade(): void
@@ -711,6 +711,10 @@ class Schema
              */
             self::createAll();
         }
+        if ($ver < 63) {
+            self::addColumn('products', 'markdown', 'bool default 0');
+            self::addColumn('products', 'markdown_note', 'str null');
+        }
         if ($ver < 62) {
             // Свій опис для Google на картці товару (без нього береться з короткого чи повного опису)
             self::addColumn('products', 'seo_description', 'str null');
@@ -1237,6 +1241,8 @@ class Schema
                 'learn_outcomes' => 'text null', 'program' => 'text null',
                 'unit' => 'str null',
                 'active' => 'bool default 1', 'featured' => 'bool default 0',
+                // Уцінка: товар із дефектом упаковки чи вітринний; markdown_note — причина для покупця
+                'markdown' => 'bool default 0', 'markdown_note' => 'str null',
                 'made_to_order' => 'bool default 1', // виробник: можна замовити без наявності
                 'low_stock_threshold' => 'int null', // ≤ цього — показуємо "закінчується" замість числа
                 // Вага однієї штуки, кг — щоб форма накладної не питала те, що

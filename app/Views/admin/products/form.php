@@ -177,6 +177,11 @@ $roEdit = $canEdit ? '' : 'disabled';
 
 Технічні дані (вага, обʼєм, регіон) краще виносити в Характеристики нижче: за ними працюють фільтри в каталозі, а за текстом опису — ні.">
       <label>Повний опис</label><textarea name="description" rows="5" <?= $roEdit ?>><?= e($p['description'] ?? '') ?></textarea></div>
+    <div class="field" style="max-width:520px">
+      <label>Причина уцінки (бачить покупець)</label>
+      <input type="text" name="markdown_note" maxlength="160" value="<?= e($p['markdown_note'] ?? '') ?>" placeholder="Наприклад: пом’ята коробка, іграшка нова" <?= $roEdit ?>>
+      <p class="field-hint">Показується лише якщо ввімкнено «Уцінка».</p>
+    </div>
     <details class="field" style="margin-bottom:18px"<?= (!empty($p["seo_title"]) || !empty($p["seo_description"])) ? " open" : "" ?>>
       <summary style="cursor:pointer;font-weight:700">SEO: як картка виглядає в Google<?= trim((string)($p['seo_title'] ?? '')) . trim((string)($p['seo_description'] ?? '')) === '' ? ' · автоматично' : '' ?></summary>
       <div style="margin-top:12px">
@@ -201,6 +206,11 @@ $roEdit = $canEdit ? '' : 'disabled';
 
 Ставте небагатьом позиціям. Якщо позначити половину каталогу, позначка перестане щось означати, а сортування — допомагати.">
         <input type="checkbox" name="featured" <?= ($p['featured'] ?? 0) ? 'checked' : '' ?> <?= $roEdit ?>> Рекомендований (на головній)</label>
+      <label class="checkbox" data-help-title="Уцінка"
+             data-help="Позначає товар як уцінений: на картці в каталозі й на сторінці товару зʼявляється позначка «Уцінка».
+
+Підходить для товару з пошкодженою упаковкою, вітринного зразка, залишку без коробки. Поле «Причина» нижче покупець бачить на сторінці товару, тож напишіть чесно, що саме не так.">
+        <input type="checkbox" name="markdown" <?= ($p['markdown'] ?? 0) ? 'checked' : '' ?> <?= $roEdit ?>> Уцінка</label>
       <label class="checkbox" data-help-title="Виготовляємо під замовлення"
              data-help="Змінює те, що бачить покупець, коли товару немає на складі.
 

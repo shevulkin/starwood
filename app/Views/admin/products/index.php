@@ -106,7 +106,8 @@
         </div>
       </td>
       <td><?= $p['active'] ? '<span class="status-pill st-processing">Активний</span>' : '<span class="status-pill st-canceled">Прихований</span>' ?>
-          <?= $p['featured'] ? ' <span class="status-pill st-new">Хіт</span>' : '' ?></td>
+          <?= $p['featured'] ? ' <span class="status-pill st-new">Хіт</span>' : '' ?>
+          <?= !empty($p['markdown']) ? ' <span class="status-pill st-processing">Уцінка</span>' : '' ?></td>
       <td><a class="btn btn-line btn-xs" href="<?= e(url('/admin/products/' . $p['id'])) ?>">Редагувати</a></td>
     </tr>
   <?php endforeach; ?>

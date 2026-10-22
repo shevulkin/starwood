@@ -945,3 +945,7 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 .sv-edit-fab:hover{background:var(--teal-d)}
 .sv-edit-fab small{font-size:11px;font-weight:700;background:var(--red);color:#fff;border-radius:999px;padding:3px 8px}
 @media (max-width:700px){.sv-edit-fab{left:12px;bottom:76px;padding:11px 16px}}
+
+/* Уцінка: помітна оранжева позначка на картці й на сторінці товару */
+.sv-tag-markdown{background:#E8740C;color:#fff}
+.sv-markdown{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 10px;font-size:14px;color:var(--muted)}
