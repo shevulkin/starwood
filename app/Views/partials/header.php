@@ -121,7 +121,7 @@ $short = [
       <?php foreach ($navCats as $c): ?>
         <a href="<?= e(shop_url($c['slug'])) ?>"<?= $curCat === $c['slug'] ? ' aria-current="page"' : '' ?>><?= e($short[$c['slug']] ?? $c['name']) ?></a>
       <?php endforeach; ?>
-      <?php if ($navMarkdown): ?><a class="sv-nav-markdown" href="<?= e(shop_url(null, ['markdown' => '1'])) ?>">Уцінені іграшки</a><?php endif; ?>
+      <?php if ($navMarkdown): ?><a class="sv-nav-markdown" href="<?= e(shop_url(null, ['markdown' => '1'])) ?>"><span class="md-full">Уцінені іграшки</span><span class="md-short">Уцінка</span></a><?php endif; ?>
     </div>
   </nav>
 
