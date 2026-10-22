@@ -89,7 +89,7 @@ $roCard = $canCard ? '' : 'disabled';
 </form>
 
 <?php /* фільтр у дії форми: після збереження редірект має повернути ту саму добірку */ ?>
-<form method="post" autocomplete="off" action="<?= e(url('/admin/products/bulk' . $query)) ?>">
+<form method="post" action="<?= e(url('/admin/products/bulk' . $query)) ?>">
   <?= Csrf::field() ?>
   <p class="dim" style="margin:0 0 12px">
     У товарів з варіантами ціна й залишок задаються окремим рядком для кожного варіанта — саме з них береться наявність у магазині.
