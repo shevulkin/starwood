@@ -444,16 +444,8 @@ $roEdit = $canEdit ? '' : 'disabled';
   </div>
   <?php endif; ?>
 
-  <div class="admin-card">
+  <div class="admin-card card-inline">
     <h2 class="h-serif">Торг</h2>
-    <p class="dim" style="margin:-8px 0 18px">
-      Покупець може запропонувати свою ціну за свою кількість, а ви — погодитись,
-      дати зустрічні умови або відмовити. Пропозиції приходять у розділ
-      <a href="<?= e(url('/admin/offers')) ?>">Торг</a>.
-      <?php if (!Offers::enabled()): ?>
-        <b>Зараз торг вимкнений по всьому магазину</b> — увімкнути можна в Налаштуваннях.
-      <?php endif; ?>
-    </p>
     <label class="checkbox" data-help-title="Торг на цей товар"
            data-help="Галка стоїть — на сторінці товару є блок «Не влаштовує ціна? Запропонуйте свою».
 
@@ -464,6 +456,7 @@ $roEdit = $canEdit ? '' : 'disabled';
 Погоджена в торзі ціна не складається ні з чим: ні акція, ні опт, ні набір, ні промокод на таку позицію більше не діють.">
       <input type="checkbox" name="bargain" <?= Offers::bargain($p) ? 'checked' : '' ?> <?= $roEdit ?>>
       Дозволити торг за цей товар</label>
+    <span class="dim card-note">Пропозиції покупців — у розділі <a href="<?= e(url('/admin/offers')) ?>">Торг</a>.<?php if (!Offers::enabled()): ?> <b>Зараз торг вимкнений по всьому магазину</b> (Налаштування).<?php endif; ?></span>
   </div>
   <?php endif; ?>
 

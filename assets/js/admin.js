@@ -181,21 +181,37 @@
     if (note && saved === '') note.textContent = 'Усі зміни збережено';
   });
 
-  // Картки форми товару згортаються кліком по заголовку. За замовчуванням розгорнута лише перша («Основне»): решта —
-  // згорнуті, щоб форма не була на п'ять екранів. Що ви розгорнули чи згорнули, браузер памʼятає.
+  // Картки форми товару згортаються кліком по заголовку. Згорнуті за замовчуванням лише об'ємні й рідко потрібні блоки
+  // (оптова знижка, варіанти, сторінка курсу); основні й дрібні (Основне, Торг, Характеристики, Ціни й залишки, Фото)
+  // лишаються відкритими. У заголовку згорнутого блока — коротка довідка, що всередині. Вибір памʼятається в браузері.
   (function () {
     var form = document.getElementById('productForm');
     if (!form) return;
-    var KEY = 'sv_cards_state', saved = {};
+    var FOLD_BY_DEFAULT = ['Оптова знижка', 'Варіанти', 'Сторінка курсу'];
+    var KEY = 'sv_cards_state2', saved = {};
     try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
     var cards = [];
-    Array.prototype.forEach.call(document.querySelectorAll('.admin-main .admin-card'), function (card, i) {
+    function summary(name, card) {
+      if (name === 'Оптова знижка') {
+        var on = card.querySelector('#wholesaleOn'), n = Math.floor(card.querySelectorAll('input[name^="tier"]').length / 2);
+        var filled = 0; card.querySelectorAll('input[name^="tier"][name$="[min_qty]"]').forEach(function (i) { if (i.value.trim() !== '') filled++; });
+        return (on && on.checked ? 'опт діє' : 'опт вимкнено') + (filled ? ' · порогів: ' + filled : '');
+      }
+      if (name === 'Варіанти') {
+        var v = card.querySelectorAll('.variant-row').length;
+        return v ? 'варіантів: ' + v : 'немає варіантів';
+      }
+      return '';
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.admin-main .admin-card'), function (card) {
       var h = card.querySelector(':scope > h2');
-      if (!h) return;
+      if (!h || card.classList.contains('card-inline')) return;
       var name = h.textContent.replace(/\s+/g, ' ').trim().slice(0, 60);
-      cards.push(card);
+      cards.push({ card: card, name: name });
       card.classList.add('is-foldable');
-      var folded = (name in saved) ? !!saved[name] : cards.length > 1;   // без вибору: перша відкрита, решта згорнуті
+      var sum = summary(name, card);
+      if (sum) { var b = document.createElement('span'); b.className = 'card-badge'; b.textContent = sum; h.appendChild(b); }
+      var folded = (name in saved) ? !!saved[name] : FOLD_BY_DEFAULT.indexOf(name) > -1;
       card.classList.toggle('is-folded', folded);
       h.addEventListener('click', function (e) {
         if (e.target.closest('a,button,input,select')) return;
@@ -212,9 +228,9 @@
         b.type = 'button'; b.className = 'btn btn-line btn-sm'; b.textContent = label;
         b.addEventListener('click', function () {
           cards.forEach(function (c, i) {
-            c.classList.toggle('is-folded', fold && i > 0);
-            var h = c.querySelector(':scope > h2');
-            if (h) saved[h.textContent.replace(/\s+/g, ' ').trim().slice(0, 60)] = (fold && i > 0) ? 1 : 0;
+            var f = fold && i > 0;
+            c.card.classList.toggle('is-folded', f);
+            saved[c.name] = f ? 1 : 0;
           });
           try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
         });

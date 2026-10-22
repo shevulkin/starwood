@@ -2238,3 +2238,13 @@ textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
 .admin-card.is-foldable.is-folded>h2::before{transform:rotate(-90deg);background:var(--teal);color:#fff}
 .admin-card.is-foldable.is-folded>h2::after{content:'Розгорнути';background:var(--teal);color:#fff;border-color:var(--teal)}
 .admin-card.is-foldable.is-folded>h2:hover{background:var(--teal-l)}
+
+/* «Торг» і подібні дрібні блоки — один рядок: заголовок, галка, коротка примітка */
+.admin-card.card-inline{display:flex;align-items:center;flex-wrap:wrap;gap:6px 22px;padding-top:12px;padding-bottom:12px}
+.admin-card.card-inline>h2{margin:0;padding:0;border:0;font-size:17px}
+.admin-card.card-inline>.checkbox{margin:0}
+.admin-card.card-inline>.card-note{font-size:12.5px;flex:1 1 280px}
+/* довідка в заголовку згорнутого блока */
+.card-badge{font-size:12px;font-weight:500;color:var(--muted);background:var(--bg3);border:1px solid var(--line2);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.admin-card.is-foldable>h2 .card-badge{order:1}
+.admin-card.is-foldable>h2::after{order:2}
