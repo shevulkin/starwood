@@ -127,7 +127,11 @@ class Profile
         }
 
         $fresh = DB::row('SELECT * FROM users WHERE id = ?', [$u['id']]);
+        // Кабінет: три останні замовлення одразу, ще кілька — за кнопкою «Показати ще», повна історія — окрема сторінка
+        $recentOrders = DB::all('SELECT id, number, status, total, created_at FROM orders WHERE user_id = ? AND parent_id IS NULL ORDER BY id DESC LIMIT 10', [$u['id']]);
+        $ordersTotal = (int)DB::val('SELECT COUNT(*) FROM orders WHERE user_id = ? AND parent_id IS NULL', [$u['id']]);
         View::show('account/profile', [
+            'recent_orders' => $recentOrders, 'orders_total' => $ordersTotal,
             'u' => $fresh,
             // Блок «моя каса» бачить лише той, хто взагалі пробиває чеки, і
             // лише там, де є куди їх пробивати: покупцю ці слова ні про що

@@ -8,7 +8,7 @@ $more = static fn(string $title, string $html): string =>
     '<details class="sv-more"><summary>' . e($title) . '</summary><div class="dim">' . $html . '</div></details>';
 ?>
 <section class="section sv-compact" style="padding-top:32px">
-  <div class="container narrow">
+  <div class="container narrow sv-cab">
     <div class="kicker">Кабінет</div>
     <h2>Мій кабінет</h2>
     <?php if (empty($u['phone'])): ?>
@@ -52,7 +52,32 @@ $more = static fn(string $title, string $html): string =>
       <p style="margin-top:14px"><a class="btn btn-line" href="<?= e(url('/learning')) ?>">🎓 Моє навчання</a></p>
     <?php endif; ?>
 
-    <a class="sv-orders-link" href="<?= e(url('/orders')) ?>"><span>📦 Мої замовлення</span><span aria-hidden="true">→</span></a>
+    <div class="admin-card sv-myorders" style="margin-top:18px">
+      <div class="sv-myorders-head">
+        <h2 class="h-serif">📦 Мої замовлення</h2>
+        <?php if ($orders_total > 0): ?><a class="sv-myorders-all" href="<?= e(url('/orders')) ?>">Уся історія<?= $orders_total > 3 ? ' (' . (int)$orders_total . ')' : '' ?> →</a><?php endif; ?>
+      </div>
+      <?php if (!$recent_orders): ?>
+        <p class="dim" style="margin:0">Замовлень поки немає. <a href="<?= e(url('/shop')) ?>">До магазину →</a></p>
+      <?php else: ?>
+        <?php $orderRow = static function (array $o): string {
+          return '<a class="sv-myorder" href="' . e(url('/orders')) . '"><b>' . e($o['number']) . '</b>'
+            . '<span class="dim">' . e(date('d.m.Y', strtotime($o['created_at']))) . '</span>'
+            . '<span class="chip" style="cursor:default">' . e(OrderFlow::statusLabel($o['status'])) . '</span>'
+            . '<b class="price">' . e(price_fmt($o['total'])) . '</b></a>';
+        }; ?>
+        <?php foreach (array_slice($recent_orders, 0, 3) as $o) echo $orderRow($o); ?>
+        <?php if (count($recent_orders) > 3): ?>
+          <details class="sv-myorders-more">
+            <summary>Показати ще <?= count($recent_orders) - 3 ?></summary>
+            <?php foreach (array_slice($recent_orders, 3) as $o) echo $orderRow($o); ?>
+          </details>
+        <?php endif; ?>
+      <?php endif; ?>
+    </div>
+
+    <div class="sv-cab-cols">
+    <div class="sv-cab-col">
 
     <form class="admin-card" method="post" action="<?= e(url('/profile')) ?>" style="margin-top:14px">
       <?= Csrf::field() ?>
@@ -188,6 +213,8 @@ $more = static fn(string $title, string $html): string =>
       </div>
     </div>
 
+    </div>
+    <div class="sv-cab-col">
     <?php if ($notify_options): ?>
       <form class="admin-card" method="post" action="<?= e(url('/profile')) ?>">
         <?= Csrf::field() ?><input type="hidden" name="_action" value="notify">
@@ -339,6 +366,9 @@ $more = static fn(string $title, string $html): string =>
           <?php endif; ?>
         </div>
       </div>
+    </div>
+
+    </div>
     </div>
 
     <form class="sv-logout-row" method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?>
