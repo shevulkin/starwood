@@ -2298,3 +2298,19 @@ textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
   .brand-card>div:last-of-type{margin:0!important;flex-direction:column;align-items:stretch!important;gap:6px!important;min-width:130px}
   .brand-card>div:last-of-type .dim{margin-left:0!important;text-align:center;font-size:12px}
 }
+
+/* Користувачі: дата не переноситься, ім'я з поштою в стовпці гнучко; щільний вигляд діє вже від 901px */
+.user-grid .u-since{white-space:nowrap}
+.user-grid>div:first-child{min-width:0}
+.user-grid>div:first-child .dim{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (min-width:901px) and (max-width:1100px){
+  .user-grid{grid-template-columns:minmax(150px,1fr) 1.3fr 1fr 1.5fr auto;gap:8px 14px;align-items:center}
+  .user-grid label:not(.checkbox){margin:0 0 3px;font-size:11px}
+  .user-grid .checkbox{display:inline-flex!important;align-items:center;gap:6px;margin:0 12px 2px 0;font-size:13px;white-space:nowrap}
+  .user-grid .u-none,.user-grid [data-seller-hint]{display:none}
+  .user-grid .store-picker{max-height:none;flex-direction:row;flex-wrap:wrap;gap:2px 10px;padding:0;border:0;background:none}
+  .user-grid>div:nth-child(4){display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;align-items:center}
+  .user-grid>div:nth-child(4)>label{grid-column:1/-1}
+  .user-grid>div:nth-child(4) .chan-list{margin:0}
+  .user-actions{flex-direction:row;align-items:center;padding-top:0;gap:10px}
+}

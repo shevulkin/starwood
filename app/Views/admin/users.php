@@ -79,7 +79,7 @@ $tabs = ['staff' => 'Персонал', 'customers' => 'Покупці', 'all' =
         <div>
           <b><?= e($u['name']) ?></b>
           <div class="dim"><?= e($u['email'] ?: 'без email') ?></div>
-          <div class="dim" style="font-size:11.5px">у системі з <?= e(substr((string)$u['created_at'], 0, 10)) ?></div>
+          <div class="dim u-since" style="font-size:11.5px" title="Дата реєстрації">з <?= e(substr((string)$u['created_at'], 0, 10)) ?></div>
         </div>
 
         <div data-help-title="Ролі"
