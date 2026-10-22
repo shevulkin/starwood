@@ -55,6 +55,7 @@ class Shop
             'sort' => in_array(qs('sort'), ['price_asc', 'price_desc', 'new'], true) ? qs('sort') : '',
             'age' => Ages::band(qs('age')) ? qs('age') : '',
             'instock' => qs('instock') !== '',
+            'markdown' => qs('markdown') !== '',
             'attr' => is_array($_GET['attr'] ?? null) ? $_GET['attr'] : [],
             // і один slug із посилання, і галки в панелі фільтрів
             'brand' => array_values(array_filter(array_map(
@@ -160,7 +161,7 @@ class Shop
             // Вікова сторінка («іграшки від 3 років») — повноцінна посадкова для пошуку, тож вона канонічна сама собі.
             // Усе інше (сторінки, сортування, фільтри, пошук) каноніться на розділ без параметрів
             'canonical' => ($filters['age'] !== '' && $filters['q'] === '' && $filters['min'] === '' && $filters['max'] === ''
-                    && !$filters['instock'] && !$filters['attr'] && !$filters['brand'] && $filters['sort'] === '' && $page === 1)
+                    && !$filters['instock'] && !$filters['markdown'] && !$filters['attr'] && !$filters['brand'] && $filters['sort'] === '' && $page === 1)
                 ? site_origin() . shop_url($current['slug'] ?? null, ['age' => $filters['age']]) : null,
             'page_title' => ($current ? $current['name'] . ($band ? ' для дітей ' . $band[2] : '') . ' — '
                     : ($band ? 'Іграшки для дітей ' . $band[2] . ' — ' : ''))

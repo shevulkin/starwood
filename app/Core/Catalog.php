@@ -716,6 +716,8 @@ class Catalog
         if (!empty($f['instock'])) {
             $where[] = 'EXISTS (SELECT 1 FROM store_stock ss WHERE ss.product_id = p.id AND ss.qty > 0)';
         }
+        // «Уцінка» — лише товари з позначкою
+        if (!empty($f['markdown'])) $where[] = 'p.markdown = 1';
         if (isset($f['min']) && $f['min'] !== '') { $where[] = 'p.base_price >= ?'; $params[] = (float)$f['min']; }
         if (isset($f['max']) && $f['max'] !== '') { $where[] = 'p.base_price <= ?'; $params[] = (float)$f['max']; }
         if (!empty($f['store_id'])) {

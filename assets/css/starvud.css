@@ -949,3 +949,6 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 /* Уцінка: помітна оранжева позначка на картці й на сторінці товару */
 .sv-tag-markdown{background:#E8740C;color:#fff}
 .sv-markdown{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 10px;font-size:14px;color:var(--muted)}
+.sv-md-link{text-decoration:none;margin-left:10px;display:inline-block}
+.sv-md-link.is-on{background:#fff;color:#E8740C;box-shadow:inset 0 0 0 1.5px #E8740C}
+.sv-check-markdown{align-items:center}

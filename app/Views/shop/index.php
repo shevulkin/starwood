@@ -11,13 +11,13 @@ $curSlug = $current_cat['slug'] ?? null;
 // поточні параметри, щоб посилання смуг і розділів їх не губили
 $keep = array_filter([
     'q' => $filters['q'], 'min' => $filters['min'], 'max' => $filters['max'], 'sort' => $filters['sort'],
-    'age' => $filters['age'], 'instock' => $filters['instock'] ? '1' : '', 'brand' => $filters['brand'], 'attr' => array_filter($filters['attr']),
+    'age' => $filters['age'], 'instock' => $filters['instock'] ? '1' : '', 'markdown' => $filters['markdown'] ? '1' : '', 'brand' => $filters['brand'], 'attr' => array_filter($filters['attr']),
 ], static fn($v) => $v !== '' && $v !== [] && $v !== null);
 $with = static function (array $change) use ($keep): array {
     $q = array_merge($keep, $change);
     return array_filter($q, static fn($v) => $v !== '' && $v !== null && $v !== []);
 };
-$hasActiveFilters = $filters['q'] !== '' || $filters['min'] !== '' || $filters['max'] !== '' || $filters['instock']
+$hasActiveFilters = $filters['q'] !== '' || $filters['min'] !== '' || $filters['max'] !== '' || $filters['instock'] || $filters['markdown']
     || array_filter($filters['attr']) || $filters['brand'];
 $title = $brand ? $brand['name'] : ($current_cat['name'] ?? ($filters['q'] !== '' ? 'Пошук: «' . $filters['q'] . '»' : 'Каталог'));
 $catCounts = [];
@@ -39,6 +39,9 @@ foreach (DB::all('SELECT category_id, COUNT(*) n FROM products WHERE active = 1 
     <div class="sv-shop-title">
       <h1><?= e($title) ?></h1>
       <span class="sv-count-head"><?= (int)$total ?> <?= plural((int)$total, 'товар', 'товари', 'товарів') ?></span>
+      <?php $mdAll = (int)DB::val('SELECT COUNT(*) FROM products WHERE active = 1 AND markdown = 1'); if ($mdAll > 0): ?>
+        <a class="sv-tag sv-tag-markdown sv-md-link<?= $filters['markdown'] ? ' is-on' : '' ?>" href="<?= e(shop_url(null, $filters['markdown'] ? [] : ['markdown' => '1'])) ?>"><?= $filters['markdown'] ? 'Усі товари' : 'Уцінка · ' . $mdAll ?></a>
+      <?php endif; ?>
     </div>
     <form class="sv-sort" method="get" action="<?= e(shop_url($curSlug)) ?>">
       <?php foreach ($with(['sort' => '']) as $k => $v): if (is_array($v)) continue; ?><input type="hidden" name="<?= e($k) ?>" value="<?= e($v) ?>"><?php endforeach; ?>
@@ -102,6 +105,9 @@ foreach (DB::all('SELECT category_id, COUNT(*) n FROM products WHERE active = 1 
         </fieldset>
 
         <label class="sv-check-line"><input type="checkbox" name="instock" value="1" <?= $filters['instock'] ? 'checked' : '' ?>> Лише в наявності</label>
+        <?php $mdCount = (int)DB::val('SELECT COUNT(*) FROM products WHERE active = 1 AND markdown = 1'); if ($mdCount > 0 || $filters['markdown']): ?>
+          <label class="sv-check-line sv-check-markdown"><input type="checkbox" name="markdown" value="1" <?= $filters['markdown'] ? 'checked' : '' ?>> <span class="sv-tag sv-tag-markdown">Уцінка</span> <span class="dim"><?= $mdCount ?></span></label>
+        <?php endif; ?>
 
         <?php if ($brand_options): $chosenBrands = array_map('strval', (array)$filters['brand']); ?>
           <fieldset>
