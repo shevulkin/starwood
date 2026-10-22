@@ -1024,7 +1024,5 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 .sv-orders-link:hover{border-color:var(--teal);color:var(--teal-d)}
 .sv-backlink{display:inline-block;margin:0 0 10px;font-size:14px;color:var(--teal-d);font-weight:600;text-decoration:none}
 .sv-backlink:hover{text-decoration:underline}
-/* «Вийти» поруч із «Кабінет» (на телефоні воно є в меню, тож там не дублюємо) */
-.sv-logout{margin:0;display:flex}
-.sv-logout .sv-icon{background:none;border:0;cursor:pointer;font:inherit}
-@media (max-width:1000px){.sv-logout{display:none}}
+/* «Вийти з акаунта» — внизу сторінки кабінету */
+.sv-logout-row{margin:22px 0 6px;text-align:center}

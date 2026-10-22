@@ -340,6 +340,10 @@ $more = static fn(string $title, string $html): string =>
         </div>
       </div>
     </div>
+
+    <form class="sv-logout-row" method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?>
+      <button class="btn btn-line" type="submit">Вийти з акаунта</button>
+    </form>
   </div>
 </section>
 <?php if ($np_enabled) echo View::partial('partials/np_autocomplete'); ?>

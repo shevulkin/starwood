@@ -82,12 +82,6 @@ $short = [
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
           <span class="sv-icon-l">Кабінет</span>
         </a>
-        <form class="sv-logout" method="post" action="<?= e(url('/logout')) ?>"><?= Csrf::field() ?>
-          <button type="submit" class="sv-icon" aria-label="Вийти" title="Вийти з акаунта">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-            <span class="sv-icon-l">Вийти</span>
-          </button>
-        </form>
       <?php else: ?>
         <a class="sv-icon" href="#" id="loginBtn" aria-label="Увійти">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
