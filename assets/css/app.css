@@ -2154,3 +2154,9 @@ body.is-admin{background:#EEEBE3}
 .gen-axis.has-picked{border-color:var(--teal)}
 .gen-axis>summary::before{content:'▸ ';color:var(--muted)}
 .gen-axis[open]>summary::before{content:'▾ '}
+/* Характеристики товару: по дві в ряд на широкому екрані й компактніші рядки — 7 характеристик не розтягують картку на екран */
+#attrRows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}
+#attrRows .grid-row{margin:0;padding:6px 8px;gap:8px}
+#attrRows .grid-row select,#attrRows .grid-row input[type=text]{padding:8px 10px;min-height:0;font-size:14px}
+#attrRows .row-del{padding:6px 10px}
+@media (max-width:1150px){#attrRows{grid-template-columns:minmax(0,1fr)}}
