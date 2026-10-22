@@ -221,24 +221,6 @@
         try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
       });
     });
-    // Кнопки «Розгорнути все / Згорнути все» біля заголовка сторінки
-    var acts = document.querySelector('.admin-head-acts') || document.querySelector('.admin-head');
-    if (acts && cards.length > 1) {
-      var mk = function (label, fold) {
-        var b = document.createElement('button');
-        b.type = 'button'; b.className = 'btn btn-line btn-xs card-foldall'; b.textContent = label;
-        b.addEventListener('click', function () {
-          cards.forEach(function (c, i) {
-            var f = fold && ALWAYS_OPEN.indexOf(c.name) < 0;
-            c.card.classList.toggle('is-folded', f);
-            saved[c.name] = f ? 1 : 0;
-          });
-          try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
-        });
-        acts.insertBefore(b, acts.firstChild);
-      };
-      mk('Згорнути все', true); mk('Розгорнути все', false);
-    }
     // Збереження не має мовчки зупинятись на обовʼязковому полі в згорнутому блоці — розгортаємо його
     form.addEventListener('invalid', function (e) {
       var c = e.target.closest && e.target.closest('.admin-card.is-folded');
