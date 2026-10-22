@@ -78,7 +78,17 @@ class Users
         }
         $sellerStores = [];
         foreach (DB::all('SELECT * FROM seller_stores') as $r) $sellerStores[$r['user_id']][] = (int)$r['store_id'];
+        // Останній вхід — з журналу входів (одним запитом на всю сторінку)
+        $lastLogin = [];
+        $ids = array_map(static fn($u) => (int)$u['id'], $users);
+        if ($ids) {
+            $in = implode(',', array_fill(0, count($ids), '?'));
+            foreach (DB::all("SELECT user_id, MAX(created_at) AS at FROM auth_log WHERE event = 'login' AND user_id IN ($in) GROUP BY user_id", $ids) as $r) {
+                $lastLogin[(int)$r['user_id']] = (string)$r['at'];
+            }
+        }
         View::show('admin/users', [
+            'last_login' => $lastLogin,
             'users' => $users,
             'stores' => Catalog::stores(),
             'seller_stores' => $sellerStores,
