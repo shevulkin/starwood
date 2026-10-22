@@ -2228,3 +2228,13 @@ textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
 .admin-card.is-folded>h2::after{transform:rotate(-90deg)}
 .admin-card.is-folded>*:not(h2){display:none!important}
 .admin-card.is-folded>h2{margin-bottom:0;padding-bottom:0;border-bottom-color:transparent}
+
+/* Згортання блоків: заголовок виглядає як кнопка — шеврон ліворуч, підпис «Розгорнути/Згорнути» праворуч, підсвітка при наведенні */
+.admin-card.is-foldable>h2{display:flex;align-items:center;gap:12px;padding:10px 12px;margin:-6px -10px 12px;border-radius:8px;transition:background .12s;border-bottom:0}
+.admin-card.is-foldable>h2:hover{background:var(--teal-l)}
+.admin-card.is-foldable>h2::before{content:'▾';flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--teal-l);color:var(--teal-d);font-size:15px;transition:transform .15s}
+.admin-card.is-foldable>h2::after{content:'Згорнути';position:static;margin-left:auto;transform:none;padding:4px 12px;border:1px solid var(--line2);border-radius:999px;font-size:12px;font-weight:600;color:var(--teal-d);background:#fff}
+.admin-card.is-foldable.is-folded>h2{margin-bottom:-6px}
+.admin-card.is-foldable.is-folded>h2::before{transform:rotate(-90deg);background:var(--teal);color:#fff}
+.admin-card.is-foldable.is-folded>h2::after{content:'Розгорнути';background:var(--teal);color:#fff;border-color:var(--teal)}
+.admin-card.is-foldable.is-folded>h2:hover{background:var(--teal-l)}
