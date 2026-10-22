@@ -1,5 +1,5 @@
 <section class="section" style="padding-top:48px">
-  <div class="container narrow" style="max-width:760px">
+  <div class="container narrow">
     <div class="kicker">Кабінет</div>
     <h2>Моє навчання</h2>
     <p style="margin-top:18px">

@@ -8,7 +8,7 @@ $more = static fn(string $title, string $html): string =>
     '<details class="sv-more"><summary>' . e($title) . '</summary><div class="dim">' . $html . '</div></details>';
 ?>
 <section class="section sv-compact" style="padding-top:32px">
-  <div class="container narrow" style="max-width:780px">
+  <div class="container narrow">
     <?= View::partial('partials/account_nav', ['active' => 'profile']) ?>
     <div class="kicker">Кабінет</div>
     <h2>Мій профіль</h2>
@@ -63,8 +63,6 @@ $more = static fn(string $title, string $html): string =>
                би профіль на глухий кут: зберегти не можна нічого, зокрема імʼя. */ ?>
       <div class="field"><label>Телефон<?= empty($u['email_verified_at']) ? ' *' : '' ?></label>
         <input type="tel" name="phone" value="<?= e($u['phone']) ?>" placeholder="067 123 45 67"<?= empty($u['email_verified_at']) ? ' required' : '' ?>>
-      </div>
-      </div>
       <div class="sv-hint">
         <?php /* Стан номера показуємо словами, бо від нього залежить видима річ:
                  чи потрапить у кабінет замовлення, яке продавець оформив по
@@ -78,6 +76,8 @@ $more = static fn(string $title, string $html): string =>
               . (!empty($tg_ready) ? ' Щоб підтвердити — увійдіть через Telegram: бот попросить поділитися номером.' : '')) ?></p>
           <?php endif; ?>
         <?php endif; ?>
+      </div>
+      </div>
       </div>
       <div class="sv-row2">
       <div class="field"><label>Email</label><input type="text" value="<?= e($mail_email ?: '—') ?>" disabled>
