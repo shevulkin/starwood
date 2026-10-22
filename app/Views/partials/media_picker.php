@@ -29,7 +29,7 @@ window.MediaPicker = (function(){
         var cell = document.createElement('div');
         cell.className = 'img-cell';
         cell.style.position = 'relative';
-        cell.innerHTML = '<img src="' + base + '/assets/' + it.thumb + '" style="cursor:pointer" title="Обрати">' +
+        cell.innerHTML = '<img src="' + base + '/assets/' + it.thumb + '" loading="lazy" decoding="async" style="cursor:pointer" title="Обрати">' +
           '<span class="dim">' + it.width + '×' + it.height + ' · ' + Math.round(it.bytes/1024) + ' КБ</span>' +
           (it.builtin ? '' : '<button type="button" class="btn btn-danger btn-xs" style="position:absolute;top:4px;right:4px;padding:3px 8px" title="Видалити з сайту">✕</button>');
         cell.querySelector('img').addEventListener('click', function(){

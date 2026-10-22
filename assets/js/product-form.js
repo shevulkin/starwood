@@ -195,13 +195,23 @@
         '<a href="' + base + '/admin/attributes">Додайте їх у словник</a>, і тут з\'явиться генератор.</p>';
       return;
     }
+    // Кожна вісь згорнута: довгі списки значень (колір, тип, матеріал…) не розтягують форму, поки вони не потрібні
     genAxes.innerHTML = list.map(function (a) {
-      return '<div class="gen-axis"><b>' + esc(a.name) + '</b><div class="pick-grid">' +
+      return '<details class="gen-axis"><summary><b>' + esc(a.name) + '</b> <span class="dim gen-count">' + a.values.length + ' значень</span></summary><div class="pick-grid">' +
         a.values.map(function (v) {
           return '<label class="checkbox"><input type="checkbox" name="gen[' + a.id + '][]" value="' + v.id + '"> ' +
             (v.color ? '<i class="swatch" style="background:' + esc(v.color) + '"></i> ' : '') + esc(v.value) + '</label>';
-        }).join('') + '</div></div>';
+        }).join('') + '</div></details>';
     }).join('');
+    // у підписі осі — скільки значень уже відмічено
+    genAxes.querySelectorAll('.gen-axis').forEach(function (d) {
+      var cnt = d.querySelector('.gen-count'), total = d.querySelectorAll('input').length;
+      d.addEventListener('change', function () {
+        var n = d.querySelectorAll('input:checked').length;
+        cnt.textContent = n ? 'обрано ' + n + ' з ' + total : total + ' значень';
+        d.classList.toggle('has-picked', n > 0);
+      });
+    });
   }
 
   function esc(s) {

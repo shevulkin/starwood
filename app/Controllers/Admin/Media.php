@@ -36,9 +36,40 @@ class Media
         return $uses;
     }
 
-    /** Список усіх фото сайту (для сторінки і для вікна вибору) */
-    public static function listAll(): array
+    /**
+     * Де використовується КОЖНЕ фото — одним проходом по таблицях (path => [використання]).
+     * Раніше usage() викликали на кожне фото окремо: кілька запитів × сотні фото = тисячі запитів на відкриття бібліотеки.
+     */
+    private static function usageMap(): array
     {
+        $map = [];
+        $add = static function (string $path, string $label, string $url) use (&$map): void {
+            if ($path === '') return;
+            $k = $label . '|' . $url;
+            $map[$path][$k] = ['label' => $label, 'url' => $url];
+        };
+        $names = [];
+        foreach (DB::all('SELECT id, name, image FROM products') as $p) {
+            $names[(int)$p['id']] = $p['name'];
+            $add((string)($p['image'] ?? ''), 'Товар: ' . $p['name'], url('/admin/products/' . $p['id']));
+        }
+        foreach (DB::all('SELECT product_id, path FROM product_images') as $pi) {
+            $pid = (int)$pi['product_id'];
+            if (isset($names[$pid])) $add((string)$pi['path'], 'Товар: ' . $names[$pid], url('/admin/products/' . $pid));
+        }
+        foreach (DB::all('SELECT name, logo FROM brands') as $b) $add((string)($b['logo'] ?? ''), 'Лого бренду: ' . $b['name'], url('/admin/brands'));
+        foreach (DB::all('SELECT name, logo FROM partners') as $p) $add((string)($p['logo'] ?? ''), 'Лого партнера: ' . $p['name'], url('/admin/partners'));
+        foreach (DB::all('SELECT `key`, image FROM content_blocks') as $c) $add((string)($c['image'] ?? ''), 'Банер/фото сайту: ' . $c['key'], url('/admin/content'));
+        foreach ((json_decode(\Content::get('gallery', 'body', '[]'), true) ?: []) as $g) {
+            $add((string)($g[1] ?? ''), 'Галерея: ' . ($g[0] ?: 'фото'), url('/admin/content'));
+        }
+        return array_map('array_values', $map);
+    }
+
+    /** Список усіх фото сайту (для сторінки і для вікна вибору); $withUsage=false — без «де використовується» (вікно вибору його не показує) */
+    public static function listAll(bool $withUsage = true): array
+    {
+        $usage = $withUsage ? self::usageMap() : [];
         $dir = cfg('uploads_dir');
         $items = [];
         // завантажені фото
@@ -51,7 +82,7 @@ class Media
                 'path' => $path, 'thumb' => 'uploads/' . preg_replace('/\.(\w+)$/', '-thumb.$1', $name),
                 'width' => $size[0] ?? 0, 'height' => $size[1] ?? 0,
                 'bytes' => filesize($f) ?: 0, 'mtime' => filemtime($f) ?: 0, 'builtin' => false,
-                'usage' => self::usage($path),
+                'usage' => $usage[$path] ?? [],
             ];
         }
         usort($items, fn($a, $b) => $b['mtime'] <=> $a['mtime']);
@@ -73,7 +104,7 @@ class Media
         // тому нею керує адмін — інакше продавець одного магазину міняє картинки всім.
         Auth::requireCap('media.manage');
         if (($_GET['format'] ?? '') === 'json') {
-            json_response(['items' => self::listAll()]);
+            json_response(['items' => self::listAll(false)]);
         }
         if (is_post()) {
             $action = $_POST['_action'] ?? '';

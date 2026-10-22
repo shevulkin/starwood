@@ -2146,3 +2146,11 @@ body.is-admin{background:#EEEBE3}
 .admin-main input[type=checkbox]:focus,.admin-main input[type=radio]:focus{outline:none}
 .admin-main input[type=checkbox]:focus-visible,.admin-main input[type=radio]:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .admin-main input[type=checkbox]:checked,.admin-main input[type=checkbox]:checked:focus{background-color:var(--gold);border-color:var(--gold)}
+/* Генератор варіантів: згорнутий за замовчуванням, осі теж; вибрані значення видно в підписі осі */
+.gen-box>summary,.gen-axis>summary{list-style:none;padding:6px 0}
+.gen-box>summary::-webkit-details-marker,.gen-axis>summary::-webkit-details-marker{display:none}
+.gen-axis{margin:0 0 8px;border:1px solid var(--line2);border-radius:8px;padding:2px 12px;background:#fff}
+.gen-axis[open]{padding-bottom:10px}
+.gen-axis.has-picked{border-color:var(--teal)}
+.gen-axis>summary::before{content:'▸ ';color:var(--muted)}
+.gen-axis[open]>summary::before{content:'▾ '}

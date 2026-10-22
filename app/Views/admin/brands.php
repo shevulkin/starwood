@@ -1,4 +1,5 @@
-<div class="admin-head"><h1 class="h-serif">Бренди</h1></div>
+<div class="admin-head"><h1 class="h-serif">Бренди</h1>
+  <?php if ($back = admin_back()): ?><a class="btn btn-gold btn-sm" href="<?= e(url($back)) ?>">← Назад до товару</a><?php endif; ?></div>
 <p class="dim" style="margin:0 0 18px;max-width:760px">Чий товар. Бренд, позначений «наш», дає покупцю напис
   «Виготовимо під замовлення — ми виробник». Для решти напис нейтральний: «Виготовляється на замовлення —
   привеземо для вас». Товар без бренду вважається не нашим.</p>

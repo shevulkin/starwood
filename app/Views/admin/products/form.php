@@ -1,6 +1,7 @@
 <?php
 /** @var array|null $p @var array $variants @var array $variant_options @var array $attrs @var array $dict */
 $isNew = $p === null;
+unset($_SESSION['admin_back']);   // повернулись до товару зі словника — кнопка «Назад» уже не потрібна
 $canStore = fn(int $sid): bool => in_array($sid, Auth::storeIds(), true);
 // Картку товару веде адмін, продавець — лише ціни й залишки своїх магазинів.
 // Форма повторює те, що перевіряє Products::save(): показувати поля, які все одно
@@ -114,7 +115,7 @@ $roEdit = $canEdit ? '' : 'disabled';
             </label>
           <?php endforeach; ?>
           <?php if (!$brandList): ?>
-            <span class="dim">Список порожній — <a href="<?= e(url('/admin/brands')) ?>">додайте бренди</a>.</span>
+            <span class="dim">Список порожній — <a href="<?= e(url('/admin/brands' . (!$isNew ? '?back=' . rawurlencode('/admin/products/' . (int)$p['id']) : ''))) ?>">додайте бренди</a>.</span>
           <?php endif; ?>
         </div>
       </div>
@@ -470,7 +471,7 @@ $roEdit = $canEdit ? '' : 'disabled';
     <p class="dim" style="margin:-8px 0 14px">
       Обирайте зі спільного словника — так значення однакові в усіх товарів і працюють фільтри.
       Список залежить від категорії товару.
-      <?php if (Auth::can('catalog.manage')): ?><a href="<?= e(url('/admin/attributes')) ?>">Керувати словником →</a><?php endif; ?>
+      <?php if (Auth::can('catalog.manage')): ?><a href="<?= e(url('/admin/attributes' . (!$isNew ? '?back=' . rawurlencode('/admin/products/' . (int)$p['id']) : ''))) ?>">Керувати словником →</a><?php endif; ?>
     </p>
     <div id="attrRows" class="row-list"></div>
     <button class="btn btn-line btn-sm" type="button" id="attrAdd" style="margin-top:12px">+ Додати характеристику</button>
@@ -516,12 +517,12 @@ $roEdit = $canEdit ? '' : 'disabled';
     </div>
     <button class="btn btn-line btn-sm" type="button" id="variantAdd" style="margin-top:12px">+ Додати варіант вручну</button>
 
-    <div class="gen-box" id="genBox" style="margin-top:22px">
-      <b>Згенерувати варіанти з характеристик</b>
+    <details class="gen-box" id="genBox" style="margin-top:22px">
+      <summary style="cursor:pointer"><b>Згенерувати варіанти з характеристик</b> <span class="dim">— розгорнути</span></summary>
       <p class="dim" style="margin:6px 0 12px">Відмітьте значення — створяться всі їхні комбінації (напр. 3 розміри × 2 кольори = 6 варіантів). Наявні комбінації не дублюються.</p>
       <div id="genAxes"></div>
       <button class="btn btn-gold btn-sm" type="submit" name="_action" value="gen_variants" style="margin-top:12px">⚙ Створити комбінації</button>
-    </div>
+    </details>
   </div>
   <?php endif; ?>
 

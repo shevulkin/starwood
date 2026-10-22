@@ -31,6 +31,7 @@ $typeOptions = function (string $current): string {
 ?>
 <div class="admin-head">
   <h1 class="h-serif">Характеристики</h1>
+  <?php if ($back = admin_back()): ?><a class="btn btn-gold btn-sm" href="<?= e(url($back)) ?>">← Назад до товару</a><?php endif; ?>
   <a class="btn btn-line btn-sm" href="<?= e(url('/admin/products')) ?>">До товарів →</a>
 </div>
 

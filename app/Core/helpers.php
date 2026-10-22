@@ -321,6 +321,17 @@ function slugify(string $text): string {
     return trim(preg_replace('~-+~', '-', $text), '-') ?: 'item';
 }
 
+/**
+ * «Повернутися до товару»: з картки товару ведуть у словники (характеристики, бренди) із ?back=/admin/products/ID.
+ * Адресу запамʼятовуємо в сесії (форми словника перезавантажують сторінку, і параметр загубився б) і приймаємо лише
+ * шлях картки товару — щоб ?back= не став відкритим перенаправленням.
+ */
+function admin_back(): string {
+    $b = (string)($_GET['back'] ?? '');
+    if ($b !== '' && preg_match('~^/admin/products/\d+$~', $b)) $_SESSION['admin_back'] = $b;
+    return (string)($_SESSION['admin_back'] ?? '');
+}
+
 function now(): string { return date('Y-m-d H:i:s'); }
 
 function request_path(): string {
