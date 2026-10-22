@@ -62,7 +62,7 @@ $tabs = ['staff' => 'Персонал', 'customers' => 'Покупці', 'all' =
   <div class="admin-card dim">Нікого не знайдено. Спробуйте інший запит або вкладку «Усі».</div>
 <?php endif; ?>
 
-<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;flex-direction:column;gap:8px">
   <?php foreach ($users as $u): $uid = (int)$u['id'];
       $has = $user_roles[$uid] ?? [];
       $isSeller = in_array(Roles::SELLER, $has, true);
@@ -100,7 +100,7 @@ $tabs = ['staff' => 'Персонал', 'customers' => 'Покупці', 'all' =
               <?= e(Roles::label($r)) ?>
             </label>
           <?php endforeach; ?>
-          <span class="dim" style="font-size:12px">Без жодної — звичайний покупець</span>
+          <span class="dim u-none" style="font-size:12px" title="Без жодної ролі — звичайний покупець">Без жодної — звичайний покупець</span>
         </div>
 
         <?php /* Точки привʼязані до ролі продавця (Users::saveStores), а не до кожної
