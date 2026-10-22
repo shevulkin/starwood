@@ -2248,3 +2248,17 @@ textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
 .card-badge{font-size:12px;font-weight:500;color:var(--muted);background:var(--bg3);border:1px solid var(--line2);border-radius:999px;padding:3px 10px;white-space:nowrap}
 .admin-card.is-foldable>h2 .card-badge{order:1}
 .admin-card.is-foldable>h2::after{order:2}
+
+/* Фотографії товару: компактна стрічка мініатюр замість великих карток */
+#photos .img-grid{gap:10px 12px}
+#photos .img-cell{width:92px;text-align:center}
+#photos .img-cell img{width:92px;height:92px;border-radius:8px}
+#photos .img-del{top:3px;right:3px}
+#photos .img-del .btn{padding:1px 6px;font-size:11px;line-height:1.3;min-height:0;background:rgba(255,255,255,.92)}
+#photos .img-badge{top:4px;left:4px;font-size:10px;padding:1px 6px}
+#photos .img-actions{gap:3px;margin-top:4px;flex-wrap:nowrap}
+#photos .img-actions form{gap:3px}
+#photos .img-actions .btn{padding:2px 8px;min-height:26px;font-size:13px;letter-spacing:0}
+#photos .img-cell .dim{font-size:10.5px;line-height:1.25;margin-top:3px}
+#photos .admin-card>p.dim,#photos>p.dim{margin:0 0 10px}
+.card-foldall{padding:4px 10px!important;min-height:0!important;font-size:11px}

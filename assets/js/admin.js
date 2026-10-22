@@ -188,6 +188,7 @@
     var form = document.getElementById('productForm');
     if (!form) return;
     var FOLD_BY_DEFAULT = ['Оптова знижка', 'Варіанти', 'Сторінка курсу'];
+    var ALWAYS_OPEN = ['Основне', 'Фотографії'];   // головні блоки не згортаються самі й не потрапляють під «Згорнути все»
     var KEY = 'sv_cards_state2', saved = {};
     try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
     var cards = [];
@@ -211,7 +212,7 @@
       card.classList.add('is-foldable');
       var sum = summary(name, card);
       if (sum) { var b = document.createElement('span'); b.className = 'card-badge'; b.textContent = sum; h.appendChild(b); }
-      var folded = (name in saved) ? !!saved[name] : FOLD_BY_DEFAULT.indexOf(name) > -1;
+      var folded = ALWAYS_OPEN.indexOf(name) > -1 ? false : ((name in saved) ? !!saved[name] : FOLD_BY_DEFAULT.indexOf(name) > -1);
       card.classList.toggle('is-folded', folded);
       h.addEventListener('click', function (e) {
         if (e.target.closest('a,button,input,select')) return;
@@ -225,10 +226,10 @@
     if (acts && cards.length > 1) {
       var mk = function (label, fold) {
         var b = document.createElement('button');
-        b.type = 'button'; b.className = 'btn btn-line btn-sm'; b.textContent = label;
+        b.type = 'button'; b.className = 'btn btn-line btn-xs card-foldall'; b.textContent = label;
         b.addEventListener('click', function () {
           cards.forEach(function (c, i) {
-            var f = fold && i > 0;
+            var f = fold && ALWAYS_OPEN.indexOf(c.name) < 0;
             c.card.classList.toggle('is-folded', f);
             saved[c.name] = f ? 1 : 0;
           });

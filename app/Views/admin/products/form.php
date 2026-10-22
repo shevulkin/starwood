@@ -76,7 +76,7 @@ $roEdit = $canEdit ? '' : 'disabled';
             <form method="post" action="<?= e(url('/admin/products/' . $p['id'])) ?>"><?= Csrf::field() ?>
               <input type="hidden" name="_action" value="main_image">
               <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
-              <button class="btn btn-line btn-xs" title="Зробити головним">★ Головне</button>
+              <button class="btn btn-line btn-xs" title="Зробити головним">★</button>
             </form>
           <?php endif; ?>
         </div>
