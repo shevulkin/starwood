@@ -2281,3 +2281,20 @@ textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
   .user-actions{flex-direction:row;align-items:center;padding-top:0;gap:12px}
   .msg-box{margin-top:6px;padding-top:6px}
 }
+
+/* Бренди: один щільний рядок на бренд (назва · опис · активний | лого | дії) замість великої картки */
+@media (min-width:1001px){
+  .brand-card{display:grid;grid-template-columns:minmax(0,1fr) 190px auto;gap:6px 18px;align-items:center;padding:10px 16px;margin-bottom:8px}
+  .brand-card>div:first-of-type{display:contents}
+  .brand-card>div:first-of-type>div:first-child{display:grid;grid-template-columns:190px minmax(0,1fr) auto;gap:6px 14px;align-items:center;min-width:0}
+  .brand-card .field{margin:0!important}
+  .brand-card .field label{margin-bottom:2px}
+  .brand-card textarea{height:40px;min-height:40px;resize:vertical;padding:7px 10px;font-size:13px}
+  .brand-card>div:first-of-type>div:last-child{width:auto!important;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+  .brand-card>div:first-of-type>div:last-child>label{margin:0!important;flex:none;width:100%}
+  .brand-card>div:first-of-type>div:last-child img{max-height:34px!important}
+  .brand-card>div:first-of-type>div:last-child>div{padding:4px 8px!important;margin:0!important}
+  .brand-card>div:first-of-type>div:last-child p{margin:0!important;font-size:12px}
+  .brand-card>div:last-of-type{margin:0!important;flex-direction:column;align-items:stretch!important;gap:6px!important;min-width:130px}
+  .brand-card>div:last-of-type .dim{margin-left:0!important;text-align:center;font-size:12px}
+}

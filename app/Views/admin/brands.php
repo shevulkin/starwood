@@ -25,7 +25,7 @@
 <?php foreach ($brands as $b): $n = (int)($counts[(int)$b['id']] ?? 0); ?>
   <?php /* окрема форма на бренд: файл лого не можна вкласти у спільну форму
            таблиці, а вкладені форми браузер не приймає */ ?>
-  <form class="admin-card" method="post" action="<?= e(url('/admin/brands')) ?>" enctype="multipart/form-data">
+  <form class="admin-card brand-card" method="post" action="<?= e(url('/admin/brands')) ?>" enctype="multipart/form-data">
     <?= Csrf::field() ?><input type="hidden" name="id" value="<?= (int)$b['id'] ?>">
 
     <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
