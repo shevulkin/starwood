@@ -14,6 +14,8 @@
  * перезавантаження сторінки.
  */
 $navCats = Catalog::categoryTree();
+// Пункт «Уцінка» в меню — лише коли є що показати
+$navMarkdown = (int)DB::val('SELECT COUNT(*) FROM products WHERE active = 1 AND markdown = 1') > 0;
 $phone1 = Content::title('contact_phone');
 $phone2 = Content::title('contact_phone2');
 $tel = static fn(string $p): string => preg_replace('~[^\d+]~', '', $p);
@@ -119,6 +121,7 @@ $short = [
       <?php foreach ($navCats as $c): ?>
         <a href="<?= e(shop_url($c['slug'])) ?>"<?= $curCat === $c['slug'] ? ' aria-current="page"' : '' ?>><?= e($short[$c['slug']] ?? $c['name']) ?></a>
       <?php endforeach; ?>
+      <?php if ($navMarkdown): ?><a class="sv-nav-markdown" href="<?= e(shop_url(null, ['markdown' => '1'])) ?>">Уцінка</a><?php endif; ?>
     </div>
   </nav>
 
@@ -137,6 +140,7 @@ $short = [
     <p class="sv-mobile-h">Розділи</p>
     <a href="<?= e(url('/shop')) ?>">Усі іграшки</a>
     <?php foreach ($navCats as $c): ?><a href="<?= e(shop_url($c['slug'])) ?>"><?= e($c['name']) ?></a><?php endforeach; ?>
+    <?php if ($navMarkdown): ?><a href="<?= e(shop_url(null, ['markdown' => '1'])) ?>">Уцінка</a><?php endif; ?>
     <p class="sv-mobile-h">Покупцям</p>
     <a href="<?= e(url('/delivery')) ?>">Доставка й оплата</a>
     <a href="<?= e(url('/testimonials')) ?>">Відгуки</a>

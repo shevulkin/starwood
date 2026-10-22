@@ -952,3 +952,6 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 .sv-md-link{text-decoration:none;margin-left:10px;display:inline-block}
 .sv-md-link.is-on{background:#fff;color:#E8740C;box-shadow:inset 0 0 0 1.5px #E8740C}
 .sv-check-markdown{align-items:center}
+/* Пункт меню «Уцінка» — помаранчевий акцент серед зелених розділів */
+.sv-catbar a.sv-nav-markdown{background:#E8740C;opacity:1;font-weight:600}
+.sv-catbar a.sv-nav-markdown:hover{background:#C85F05}
