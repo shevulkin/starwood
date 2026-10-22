@@ -200,6 +200,25 @@ window.BOFU = { base: '<?= e(url('/')) ?>', vapid: '<?= e(Settings::get('vapid_p
   });
 })();
 </script>
+<script>
+/* Ліве меню памʼятає, де його прогорнули: перехід між сторінками перезавантажує сторінку, і без цього меню щоразу
+   стрибало б нагору. Позицію зберігаємо при кліку й при виході зі сторінки, відновлюємо одразу при відкритті. */
+(function () {
+  var side = document.querySelector('.admin-side');
+  if (!side) return;
+  var KEY = 'sv_side_scroll';
+  try { var y = sessionStorage.getItem(KEY); if (y !== null) side.scrollTop = parseInt(y, 10) || 0; } catch (e) {}
+  function save() { try { sessionStorage.setItem(KEY, String(side.scrollTop)); } catch (e) {} }
+  side.addEventListener('click', save, true);
+  window.addEventListener('pagehide', save);
+  // поточний пункт має бути видно: якщо меню ще не прогортане до нього — підводимо
+  var cur = side.querySelector('a.active');
+  if (cur) {
+    var r = cur.getBoundingClientRect(), s = side.getBoundingClientRect();
+    if (r.top < s.top || r.bottom > s.bottom) side.scrollTop += (r.top - s.top) - s.height / 2;
+  }
+})();
+</script>
 <script src="<?= e(asset_v('js/drop.js')) ?>" defer></script>
 <script src="<?= e(asset_v('js/rich-editor.js')) ?>" defer></script>
 <script src="<?= e(asset_v('js/admin.js')) ?>" defer></script>
