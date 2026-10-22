@@ -2162,3 +2162,29 @@ body.is-admin{background:#EEEBE3}
 @media (max-width:1150px){#attrRows{grid-template-columns:minmax(0,1fr)}}
 /* Повний опис товару — великий, можна тягнути вниз */
 textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
+
+/* Візуальний редактор опису (як у Word): панель кнопок + поле, що виглядає як готова сторінка */
+.is-admin .rte{border:1px solid var(--line2);border-radius:12px;background:#fff;overflow:clip}
+.is-admin .rte:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(35,128,122,.15)}
+.is-admin .rte-bar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 10px;background:#F3F8F6;border-bottom:1px solid var(--line2)}
+.is-admin .rte-group{display:inline-flex;gap:2px;padding-right:8px;margin-right:2px;border-right:1px solid var(--line2)}
+.is-admin .rte-group:last-of-type{border-right:0}
+.is-admin .rte-bar button{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;padding:0 10px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--text);font:600 13px/1 var(--sans);cursor:pointer;text-transform:none;letter-spacing:0}
+.is-admin .rte-bar button:hover{background:#fff;border-color:var(--line2)}
+.is-admin .rte-bar button.on{background:var(--teal-l);border-color:#9CCBC3;color:var(--teal-d)}
+.is-admin .rte-bar .rte-code{margin-left:auto;font-family:ui-monospace,Consolas,monospace;color:var(--dim)}
+.is-admin .rte-area{position:relative;min-height:320px;max-height:75vh;overflow:auto;padding:18px 22px;font:16px/1.65 var(--sans);color:var(--text);outline:none}
+.is-admin .rte-area>:first-child{margin-top:0}
+.is-admin .rte-area p{margin:0 0 .8em}
+.is-admin .rte-area h2{font:700 21px/1.3 var(--serif);margin:1.1em 0 .45em;letter-spacing:-.01em}
+.is-admin .rte-area h3{font:700 17px/1.35 var(--serif);margin:1em 0 .4em}
+.is-admin .rte-area ul,.is-admin .rte-area ol{margin:0 0 .9em;padding-left:1.4em}
+.is-admin .rte-area li{margin:.2em 0}
+.is-admin .rte-area a{color:var(--teal-d);text-decoration:underline}
+.is-admin .rte-area img{display:block;max-width:100%;max-height:320px;width:auto;height:auto;border-radius:10px}
+.is-admin .rte-area blockquote{margin:0 0 .9em;padding-left:14px;border-left:3px solid var(--teal);color:var(--muted)}
+.is-admin .rte.is-empty .rte-area::before{content:attr(data-placeholder);color:var(--dim);pointer-events:none;position:absolute}
+.is-admin .rte-src{display:none!important}
+.is-admin .rte.is-code .rte-area{display:none}
+.is-admin .rte.is-code .rte-src{display:block!important;min-height:320px;border:0;border-radius:0;font:13px/1.55 ui-monospace,Consolas,monospace;box-shadow:none}
+.is-admin .rte.is-code .rte-bar .rte-group{opacity:.35;pointer-events:none}

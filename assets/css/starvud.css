@@ -955,3 +955,16 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 /* Пункт меню «Уцінка» — помаранчевий акцент серед зелених розділів */
 .sv-catbar a.sv-nav-markdown{background:#E8740C;opacity:1;font-weight:600}
 .sv-catbar a.sv-nav-markdown:hover{background:#C85F05}
+
+/* Опис товару з візуального редактора: підзаголовки, нумеровані списки, посилання, фото, цитати, таблиці */
+.sv-desc h2{font-size:20px;font-weight:700;margin:26px 0 12px;line-height:1.3}
+.sv-desc ol{margin:0 0 16px;padding-left:22px}
+.sv-desc ol li{padding-left:4px}
+.sv-desc a{color:var(--teal-d);text-decoration:underline;text-underline-offset:3px}
+.sv-desc img{display:block;max-width:100%;height:auto;border-radius:12px;margin:14px 0}
+.sv-desc blockquote{margin:0 0 16px;padding-left:14px;border-left:3px solid var(--teal);color:var(--muted)}
+.sv-desc table{border-collapse:collapse;display:block;max-width:100%;overflow-x:auto;margin:0 0 16px}
+.sv-desc td,.sv-desc th{border:1px solid var(--line2);padding:6px 10px}
+.sv-desc strong{font-weight:700}
+.sv-desc ol li::before{content:none}
+.sv-desc ol li{position:static}

@@ -378,6 +378,34 @@ function toy(string $kind = 'bear', int $size = 160, array $opts = []): string
 }
 
 /**
+ * Безпечний HTML з редактора опису: лишаємо лише текстову розмітку, атрибути викидаємо (крім href у посилань і
+ * src/alt у фото), скрипти й обробники подій зникають разом з тегами.
+ */
+function rich_html_clean(string $html): string
+{
+    $html = preg_replace('~<(script|style|iframe|object|embed)\b.*?</\1>~is', '', $html);
+    $html = strip_tags($html, '<p><br><b><strong><i><em><u><ul><ol><li><h2><h3><h4><a><table><thead><tbody><tr><th><td><blockquote><img><figure><figcaption>');
+    return preg_replace_callback('~<([a-z0-9]+)\b([^>]*)>~i', function ($m) {
+        $tag = strtolower($m[1]);
+        if ($tag === 'a' && preg_match('~href\s*=\s*"([^"]*)"~i', $m[2], $h) && preg_match('~^(https?:|/|#|mailto:|tel:)~i', $h[1])) {
+            return '<a href="' . htmlspecialchars($h[1], ENT_QUOTES) . '" rel="noopener">';
+        }
+        if ($tag === 'img' && preg_match('~src\s*=\s*"([^"]*)"~i', $m[2], $h) && preg_match('~^(https?:|/)~i', $h[1])) {
+            preg_match('~alt\s*=\s*"([^"]*)"~i', $m[2], $al);
+            return '<img src="' . htmlspecialchars($h[1], ENT_QUOTES) . '" alt="' . htmlspecialchars($al[1] ?? '', ENT_QUOTES) . '" loading="lazy">';
+        }
+        return '<' . $tag . '>';
+    }, $html);
+}
+
+/** Текст без розмітки в один рядок (для мета-опису й фіду): межі блоків стають пробілом, інакше «Заголовок.Текст» зліпиться */
+function plain_text(?string $html): string
+{
+    $t = preg_replace('~<(?:/?(?:h[1-6]|p|div|li|ul|ol|tr|td|th|blockquote|figure|figcaption)\b[^>]*|br\s*/?)>~i', ' ', (string)$html);
+    return trim(preg_replace('~\s+~u', ' ', html_entity_decode(strip_tags($t), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+}
+
+/**
  * Простий текст опису → безпечний HTML: абзаци через порожній рядок, рядки
  * з «•» — списком, рядок, що закінчується двокрапкою, — підзаголовком.
  *
@@ -387,6 +415,9 @@ function toy(string $kind = 'bear', int $size = 160, array $opts = []): string
  */
 function rich_text(string $text): string
 {
+    $text = str_replace('{assets}/', base_url('assets/'), $text);
+    // Опис з візуального редактора вже HTML: чистимо до білого списку тегів. Звичайний текст (старі описи) — через абзаци нижче.
+    if ($text !== strip_tags($text)) return rich_html_clean($text);
     $out = '';
     foreach (preg_split("~\n\s*\n~u", trim(str_replace("\r", '', $text))) as $block) {
         $lines = array_values(array_filter(array_map('trim', explode("\n", $block)), 'strlen'));

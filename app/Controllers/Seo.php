@@ -49,7 +49,7 @@ class Seo
             [$price] = Catalog::price($p);
             if ($price === null || (float)$price <= 0) continue;
             if (Catalog::stock($pid) <= 0 && empty($p['made_to_order'])) continue;
-            $desc = trim(preg_replace('~\s+~u', ' ', strip_tags((string)($p['description'] ?: ($p['short_desc'] ?? '')))));
+            $desc = plain_text((string)($p['description'] ?: ($p['short_desc'] ?? '')));
             if ($desc === '') $desc = (string)$p['name'];
             $desc = mb_substr($desc, 0, 4500);
             $photo = Catalog::photo($p);

@@ -358,7 +358,7 @@ class Shop
         if ($own !== '') return mb_substr($own, 0, 160);
         $short = trim(strip_tags((string)($p['short_desc'] ?? '')));
         if (mb_strlen($short) >= 80) return mb_substr($short, 0, 160);
-        $full = trim(preg_replace('~\s+~u', ' ', strip_tags((string)($p['description'] ?? ''))));
+        $full = plain_text((string)($p['description'] ?? ''));
         if (mb_strlen($full) >= 80) {
             $cut = mb_substr($full, 0, 155);
             $sp = mb_strrpos($cut, ' ');
