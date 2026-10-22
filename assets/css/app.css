@@ -2199,3 +2199,32 @@ textarea.desc-big{min-height:320px;resize:vertical;line-height:1.55}
 .cat-thumb-auto{position:absolute;right:3px;bottom:3px;background:rgba(0,0,0,.62);color:#fff;border-radius:6px;padding:1px 5px;font-size:10px;font-weight:600}
 .cat-thumb-add{padding:0 4px;text-align:center;line-height:1.1}
 .admin-head-acts{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* ===== Адмінка: компактніше — блоки, відступи й поля менші приблизно на третину ===== */
+.admin-main{padding:20px 28px}
+.admin-card{padding:16px 22px 18px;margin-bottom:14px;border-radius:10px}
+.admin-card>h2,.admin-card>.h-serif{font-size:18px;margin:0 0 12px;padding-bottom:9px;border-bottom-width:1px}
+.admin-main .field{margin-bottom:12px}
+.admin-main label{font-size:12.5px;margin-bottom:4px}
+/* поля стискаємо лише на комп'ютері: на телефоні лишається 44px і 16px (інакше iOS збільшує сторінку при фокусі) */
+@media (min-width:901px){
+.admin-main input[type=text],.admin-main input[type=url],.admin-main input[type=search],.admin-main input[type=number],
+.admin-main input[type=email],.admin-main input[type=tel],.admin-main input[type=date],.admin-main input[type=password],
+.admin-main select{padding:8px 12px;font-size:14px;border-radius:8px;min-height:38px}
+.admin-main textarea{padding:9px 12px;font-size:14px;border-radius:8px}
+}
+.admin-main .field-hint{margin-top:4px;font-size:12px;min-height:0}
+.admin-main .admin-card>p.dim{margin:-4px 0 10px;font-size:13px;line-height:1.45}
+.admin-main .form-grid{gap:10px 16px}
+.admin-main .grid-row{padding:6px 8px;gap:8px}
+.admin-main .btn-sm{padding-top:7px;padding-bottom:7px}
+.admin-save{padding:10px 14px}
+.tbl th,.tbl td{padding-top:7px;padding-bottom:7px}
+@media (max-width:900px){.admin-main{padding:14px 10px}.admin-card{padding:14px 14px 16px}}
+
+/* Картки форми товару можна згортати: клік по заголовку блоку */
+#productForm .admin-card>h2,.admin-main .admin-card.is-foldable>h2{cursor:pointer;position:relative;padding-right:28px;user-select:none}
+.admin-card.is-foldable>h2::after{content:'▾';position:absolute;right:4px;top:0;color:var(--muted);font-size:14px;transition:transform .15s}
+.admin-card.is-folded>h2::after{transform:rotate(-90deg)}
+.admin-card.is-folded>*:not(h2){display:none!important}
+.admin-card.is-folded>h2{margin-bottom:0;padding-bottom:0;border-bottom-color:transparent}

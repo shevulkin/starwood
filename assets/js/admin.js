@@ -181,6 +181,27 @@
     if (note && saved === '') note.textContent = 'Усі зміни збережено';
   });
 
+  // Картки форми товару згортаються кліком по заголовку: довга форма не змушує гортати те, що зараз не потрібно.
+  // Стан (яка картка згорнута) памʼятається в браузері; за замовчуванням усе розгорнуто, щоб нічого не загубилось.
+  (function () {
+    var form = document.getElementById('productForm');
+    if (!form) return;
+    var KEY = 'sv_folded_cards', saved = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+    Array.prototype.forEach.call(document.querySelectorAll('.admin-main .admin-card'), function (card) {
+      var h = card.querySelector(':scope > h2');
+      if (!h) return;
+      var name = h.textContent.replace(/\s+/g, ' ').trim().slice(0, 60);
+      card.classList.add('is-foldable');
+      if (saved[name]) card.classList.add('is-folded');
+      h.addEventListener('click', function (e) {
+        if (e.target.closest('a,button,input,select')) return;
+        var on = card.classList.toggle('is-folded');
+        if (on) saved[name] = 1; else delete saved[name];
+        try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
+      });
+    });
+  })();
   // Списки на телефоні: таблиця розкладається на стос карток.
   //
   // Вісім колонок на 390px давали горизонтальну прокрутку з nowrap: щоб
