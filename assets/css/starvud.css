@@ -1026,7 +1026,3 @@ a.sv-hero-banner.is-custom:hover img{transform:scale(1.1)}
 .sv-backlink:hover{text-decoration:underline}
 /* «Вийти з акаунта» — внизу сторінки кабінету */
 .sv-logout-row{margin:22px 0 6px;text-align:center}
-/* «Вийти» поруч із «Кабінет» у шапці (на телефоні воно є в меню, тож там не дублюємо) */
-.sv-logout{margin:0;display:flex}
-.sv-logout .sv-icon{background:none;border:0;cursor:pointer;font:inherit}
-@media (max-width:1000px){.sv-logout{display:none}}
